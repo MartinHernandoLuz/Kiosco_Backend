@@ -1,6 +1,7 @@
 import express from "express";
 import 'dotenv/config'
 import { seguridadInicial } from "./src/middleware/seguridadInicial.js";
+import userRoutes from "./src/middleware/userRoutes.js";
 
 
 const app = express();
@@ -8,8 +9,8 @@ const app = express();
 seguridadInicial(app)
 app.use(express.json());
 
-console.log("otro fiumba")
-
+/************** Routes *************/
+app.use("/user",userRoutes)
 
 
 
