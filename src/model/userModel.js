@@ -19,3 +19,5 @@ const create = async (data) => {
       throw new Error(error.message);
     }
   };
+
+export default { create };

@@ -9,7 +9,11 @@ const app = express();
 seguridadInicial(app)
 app.use(express.json());
 
+
+
+
 /************** Routes *************/
+
 app.use("/user",userRoutes)
 
 
