@@ -20,4 +20,4 @@ const create = async (data) => {
     }
   };
 
-export default { create };
+export { create };

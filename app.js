@@ -1,7 +1,7 @@
 import express from "express";
 import 'dotenv/config'
 import { seguridadInicial } from "./src/middleware/seguridadInicial.js";
-import userRoutes from "./src/middleware/userRoutes.js";
+import userRoutes from "./src/router/userRoutes.js";
 
 
 const app = express();

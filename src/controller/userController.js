@@ -1,6 +1,6 @@
 import {create} from '../model/userModel.js'
 
-export const create = async (req, res) => {
+export const createUser = async (req, res) => {
     const data = req.body;
     try {
         const result = await create(data);
