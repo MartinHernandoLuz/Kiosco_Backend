@@ -1,11 +1,15 @@
 import db from "../config/db.js";
+import bcrypt from "bcryptjs";
 
 const create = async (data) => {
     try {
       const { email, password } = data;
-      // FALTA CIFRADO DE CONTRASEÑA
+
+      const hashedPassword = await bcrypt.hash(password, 10);
+
+
       const sentence = "INSERT INTO usuario (email, password) VALUES ($1, $2)";
-      const { rows } = await db.query(sentence, [nombre, cantidad_asientos]);
+      const { rows } = await db.query(sentence, [email, hashedPassword]);
   
       return {
         message: `Avion ${nombre} insertado con exito`,
