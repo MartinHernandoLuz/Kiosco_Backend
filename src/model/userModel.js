@@ -11,14 +11,14 @@ export const createUserDB = async (data) => {
     const { email, password } = data;
 
     // comprobar si el email ya está en la base de datos
-    const find_email = "SELECT email FROM user WHERE email = ?";
+    const find_email = "SELECT email FROM usuario WHERE email = ?";
     const [row] = await db.query(find_email, [email]);
-    if(row.length == 0) {
+    if(row.length == 1) {
       throw new Error("Email ya está en uso");
     }
 
     // encripta la contraseña
-    const hashedPassword = await bcrypt.hashSync(password, 10);
+    const hashedPassword = await bcrypt.hash(password, 10);
     
 
     // Inserta el usuario en la base de datos con la contraseña encriptada
@@ -29,7 +29,7 @@ export const createUserDB = async (data) => {
       message: `Usuario ${email} insertado con éxito`
     };
   } catch (error) {
-    throw new Error(error.message);
+    throw error;
   }
 };
 
@@ -50,7 +50,7 @@ export const loginUserDB = async (data) => {
     const user = rows[0];
 
     // Verificar la contraseña
-    const isPasswordValid = bcrypt.compareSync(password, user.password);
+    const isPasswordValid = bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
       throw new Error("Contraseña incorrecta");
     }

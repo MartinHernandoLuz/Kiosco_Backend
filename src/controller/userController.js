@@ -9,7 +9,8 @@ export const createUser = async (req, res) => {
         res.status(201).json(result); // si funciona, envía un 201 CREATED
     } catch (error) {
         // si hay error, envía el que llega por error o 500 INTERNAL por default
-        res.status(error.message || 500).json(error.message);
+        const statusCode = error.message === "Email ya está en uso" ? 400 : 500;
+        res.status(statusCode).json({"Error":error.message});
     }
 }
 
