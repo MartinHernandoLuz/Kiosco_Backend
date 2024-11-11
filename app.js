@@ -4,17 +4,18 @@ import { seguridadInicial } from "./src/middleware/seguridadInicial.js";
 import userRoutes from "./src/router/userRoutes.js";
 
 
-const app = express();
+const app = express(); // traigo a Express 
 
-seguridadInicial(app)
-app.use(express.json());
+seguridadInicial(app) // viene de carpeta Middlewares, es para poner todas las funciones de
+//                       seguridad inicial
+app.use(express.json()); // avisarle a Express que voy a enviar JSON
 
 
 
 
 /************** Routes *************/
 
-app.use("/user",userRoutes)
+app.use("/user",userRoutes) // el ruteador está en carpeta router: userRoutes.js
 
 
 
@@ -23,6 +24,6 @@ app.use("/user",userRoutes)
 
 
 /************* ARRANCAR SERVER *********************/
-// En Index
+// En Index.js
 
 export default app;
