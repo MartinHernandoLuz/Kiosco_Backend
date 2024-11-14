@@ -11,6 +11,5 @@ Proyecto Backend de un Kiosco, hercho por:
 - DB_PASSWORD="contraseña de la base de datos"
 - DB_NAME="DB que quieres usar"
 - DB_PORT="puerto de tu base de datos"
-- JWT_SECRET="secreto para el generador de Tokens"
-
+- JWT_SECRET=1234567890
 ---
