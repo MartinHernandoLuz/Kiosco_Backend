@@ -1,4 +1,5 @@
-import {getAllProductosDB,getProductoByIdDB,createProductoDB} from '../model/productoModel.js'
+import {getAllProductosDB,getProductoByIdDB,createProductoDB, updateProductoDB} from '../model/productoModel.js'
+import { errorsUpdate } from '../others/errorsUpdateProducto.js';
 
 // obtener todos los productos
 export async function getAllProductos(req,res){
@@ -38,5 +39,23 @@ export async function createProducto(req,res){
         // 409: hay conflicto con la foreign key
         const message = error.message == "La categoría no existe" ? 409 : 500
         res.status(message).json(error.message);
+    }
+}
+
+// actualizar un producto (lean línea a línea y entren en las funciones o no entenderán nada)
+export async function updateProducto(req,res){
+    try {
+        // Leer `id_producto` desde los query params ej: actualizar?id_producto=1
+        const { id_producto } = req.query; 
+        // Leer el resto de los campos desde el body
+        const data = req.body;
+        // llamo al Model para manejar la DB apartir de aquí 
+        const result = await updateProductoDB(id_producto,data);
+        res.status(201).json(result);
+    } catch(error){
+        const errorMsg = error.message;
+        // hay demaciados errores posibles, así que lo envié a la carpeta others
+        // envio res para que pueda disparar la función allí
+        errorsUpdate(errorMsg,res);
     }
 }
