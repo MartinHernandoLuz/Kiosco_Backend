@@ -22,6 +22,12 @@ app.use("/productos",productoRoutes) // el ruteador está en carpeta router: use
 
 
 
+// ruta default
+app.use("/",(req,res)=>{
+    res.json({mensaje: "acá no hay nada"})
+})
+
+
 
 /************* ARRANCAR SERVER *********************/
 // En Index.js

@@ -1,4 +1,4 @@
-import {getAllProductosDB,getProductoByIdDB,createProductoDB, updateProductoDB} from '../model/productoModel.js'
+import {getAllProductosDB,getProductoByIdDB,createProductoDB, updateProductoDB, deleteProductoByIdDB} from '../model/productoModel.js'
 import { errorsUpdate } from '../others/errorsUpdateProducto.js';
 
 // obtener todos los productos
@@ -57,5 +57,20 @@ export async function updateProducto(req,res){
         // hay demaciados errores posibles, así que lo envié a la carpeta others
         // envio res para que pueda disparar la función allí
         errorsUpdate(errorMsg,res);
+    }
+}
+
+
+// Eliminar Producto
+export async function deleteProductoById(req,res){
+    // Obtener todos los productos de la base de datos
+    try {
+        const id = req.params.id
+        const result = await deleteProductoByIdDB(id);
+        res.status(200).json(result);
+    } catch (error) {
+        // 404 not found
+        const message = error.message == "Producto no encontrado" ? 404 : 500
+        res.status(message).json(error.message);
     }
 }

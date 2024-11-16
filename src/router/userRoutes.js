@@ -11,6 +11,12 @@ router.post("/login",reqControl,loginUser) // función para iniciar seción, use
 
 
 
-
+router.use((req, res,next) => {
+    res.status(404).json({
+      error: "La ruta que buscas no existe",
+      method: req.method,
+      path: req.originalUrl,
+    });
+  });
 
 export default router; // es Importado en app.js

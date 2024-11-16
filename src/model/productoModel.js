@@ -115,3 +115,27 @@ export const updateProductoDB = async (id_producto,data) => {
     throw error;
   }
 }
+
+
+// Eliminar Producto
+export const deleteProductoByIdDB = async (id) => {
+  try {
+    // verificar existencia
+    const sentence1 = "SELECT * FROM producto WHERE id_producto = ?";
+    const [rows1] = await db.query(sentence1,[id]);
+    if(rows1.length == 0) {
+      throw new Error("El Producto no existe");
+    }
+
+    // eliminar
+    const sentence2 = "DELETE FROM producto WHERE id_producto = ?";
+    const [rows2] = await db.query(sentence2,[id]);
+    if(rows2.affectedRows < 1) {
+      throw new Error("Producto no encontrado");
+    }
+
+    return({Producto: rows1[0], Estado: "Eliminado"});
+  } catch (error) {
+    throw error;
+  }
+}

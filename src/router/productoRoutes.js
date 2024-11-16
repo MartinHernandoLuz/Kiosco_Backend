@@ -1,7 +1,7 @@
 import { Router } from "express";
-import { createProducto, getAllProductos, getProductoById, updateProducto } from "../controller/productoController.js";
+import { createProducto, deleteProductoById, getAllProductos, getProductoById, updateProducto } from "../controller/productoController.js";
 import {reqControlProducto} from "../middleware/reqCorrecionProducto.js"
-import { tienePermiso } from "../middleware/comprobarRango.js";
+import { esAdmin, tienePermiso } from "../middleware/comprobarRango.js";
 
 const router = Router() // usa la función Router de Express, para construir las rutas 
 
@@ -9,9 +9,17 @@ router.get("/",getAllProductos) //
 router.get("/:id",getProductoById)
 router.post("/crear",tienePermiso,reqControlProducto,createProducto)
 router.put("/actualizar",tienePermiso,updateProducto)
+router.delete("/eliminar/:id",esAdmin,deleteProductoById)
 
 
 
+router.use((req, res,next) => {
+    res.status(404).json({
+      error: "La ruta que buscas no existe",
+      method: req.method,
+      path: req.originalUrl,
+    });
+  });
 
 
 export default router; // es Importado en app.js

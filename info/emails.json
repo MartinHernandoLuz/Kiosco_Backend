@@ -6,5 +6,9 @@
     {
         "email": "rumba.correo@example.com",
         "password": "rumba123"
+    },
+    {
+        "email": "admin.admin@example.com",
+        "password": "admin123"
     }
 ]
