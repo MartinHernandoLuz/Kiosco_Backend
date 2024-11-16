@@ -3,6 +3,7 @@ import 'dotenv/config'
 import { seguridadInicial } from "./src/middleware/seguridadInicial.js";
 import userRoutes from "./src/router/userRoutes.js";
 import productoRoutes from "./src/router/productoRoutes.js";
+import categoriaRoutes from "./src/router/categoriaRoutes.js";
 
 const app = express(); // traigo a Express 
 
@@ -19,7 +20,7 @@ app.use("/user",userRoutes) // el ruteador está en carpeta router: userRoutes.j
 
 app.use("/productos",productoRoutes) // el ruteador está en carpeta router: userRoutes.js
 
-
+app.use("/categorias",categoriaRoutes) // el ruteador está en carpeta router: userRoutes.js
 
 
 // ruta default
