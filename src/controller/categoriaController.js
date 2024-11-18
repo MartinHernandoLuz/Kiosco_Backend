@@ -23,6 +23,10 @@ export async function getAllCategorias(req, res) {
 export async function getCategoriaById(req, res) {
     try {
         const id = req.params.id;
+        if (isNaN(id)) {
+            res.status(400).json({ Error: "El ID debe ser un número válido" });
+            return;
+        }
         const result = await getCategoriaByIdDB(id);
         res.status(200).json(result);
     } catch (error) {
@@ -48,7 +52,7 @@ export async function createCategoria(req, res) {
 export async function updateCategoria(req, res) {
     try {
         // Leer `ID_Categoria` desde los query params ej: actualizar?ID_Categoria=1
-        const { ID_Categoria } = req.query; 
+        const  ID_Categoria  = req.params.id; 
         // Leer el resto de los campos desde el body
         const data = req.body;
         // Llamo al Model para manejar la DB
@@ -64,7 +68,11 @@ export async function updateCategoria(req, res) {
 // Eliminar una categoría
 export async function deleteCategoriaById(req, res) {
     try {
-        const id = req.params.id;
+        const id = parseInt(req.params.id, 10);
+        if (isNaN(id)) {
+            res.status(400).json({ Error: "El ID debe ser un número válido" });
+            return;
+        }
         const result = await deleteCategoriaByIdDB(id);
         res.status(200).json(result);
     } catch (error) {

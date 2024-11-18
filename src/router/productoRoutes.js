@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { createProducto, deleteProductoById, getAllProductos, getProductoById, updateProducto } from "../controller/productoController.js";
-import {reqControlProducto} from "../middleware/reqCorrecionProducto.js"
+import {reqControlProducto, reqControlUpdateProducto} from "../middleware/reqCorrecionProducto.js"
 import { esAdmin, tienePermiso } from "../middleware/comprobarRango.js";
 
 const router = Router() // usa la función Router de Express, para construir las rutas 
@@ -8,7 +8,7 @@ const router = Router() // usa la función Router de Express, para construir las
 router.get("/",getAllProductos) //
 router.get("/:id",getProductoById)
 router.post("/crear",tienePermiso,reqControlProducto,createProducto)
-router.put("/actualizar",tienePermiso,updateProducto)
+router.put("/actualizar",tienePermiso,reqControlUpdateProducto,updateProducto)
 router.delete("/eliminar/:id",esAdmin,deleteProductoById)
 
 

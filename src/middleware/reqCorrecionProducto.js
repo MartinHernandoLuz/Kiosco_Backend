@@ -32,3 +32,37 @@ export const reqControlProducto = [
     next();
   },
 ];
+
+
+// Middleware de validación
+export const reqControlUpdateProducto = [
+  // Validación para "nombre" (opcional)
+  body('nombre')
+    .optional()
+    .isString().withMessage('El nombre debe ser una cadena de texto')
+    .isLength({ max: 45 }).withMessage('El nombre no debe exceder 45 caracteres'),
+
+  // Validación para "precio" (opcional)
+  body('precio')
+    .optional()
+    .isFloat({ gt: 0 }).withMessage('El precio debe ser un número positivo'),
+
+  // Validación para "stock" (opcional)
+  body('stock')
+    .optional()
+    .isInt({ min: 1 }).withMessage('El stock debe ser un entero positivo'),
+
+  // Validación para "ID_Categoria" (opcional)
+  body('ID_Categoria')
+    .optional()
+    .isInt({ min: 1 }).withMessage('El ID de la categoría debe ser un entero positivo'),
+
+  // Middleware para manejar los errores de validación
+  (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+    next();
+  },
+];

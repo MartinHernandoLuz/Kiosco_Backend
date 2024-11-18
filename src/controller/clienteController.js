@@ -1,43 +1,48 @@
-import {getAllProductosDB,getProductoByIdDB,createProductoDB, updateProductoDB, deleteProductoByIdDB} from '../model/productoModel.js'
-import { errorsUpdate } from '../others/errorsUpdateProducto.js';
+import {getAllClientesDB,
+    getClienteByIdDB,
+createClienteDB, 
+updateClienteDB, deleteClienteByIdDB} from '../model/clienteModel.js'
+import { errorsUpdate } from '../others/errorsUpdateCliente.js';
 
-// obtener todos los productos
-export async function getAllProductos(req,res){
-    // Obtener todos los productos de la base de datos
+
+
+// obtener todos los Clientes
+export async function getAllClientes(req,res){
+    // Obtener todos los Clientes de la base de datos
     try {
-        const result = await getAllProductosDB();
+        const result = await getAllClientesDB();
         res.status(200).json(result);
     } catch (error) {
         // 503: service unavailable, servicio caído temporalmente
-        const message = error.message == "Error al obtener los productos" ? 503 : 500
+        const message = error.message == "Error al obtener los Clientes" ? 503 : 500
         res.status(message).json(error.message);
     }
 }
 
-// obtener un producto por id
-export async function getProductoById(req,res){
-    // Obtener todos los productos de la base de datos
+// obtener un Cliente por id
+export async function getClienteById(req,res){
+    // Obtener todos los Clientes de la base de datos
     try {
         const id = req.params.id
         if (isNaN(id)) {
             res.status(400).json({ Error: "El ID debe ser un número válido" });
             return;
         }
-        const result = await getProductoByIdDB(id);
+        const result = await getClienteByIdDB(id);
         res.status(200).json(result);
     } catch (error) {
         // 404 not found
-        const message = error.message == "Producto no encontrado" ? 404 : 500
+        const message = error.message == "Cliente no encontrado" ? 404 : 500
         res.status(message).json(error.message);
     }
 }
 
-// crear un producto
-export async function createProducto(req,res){
-    // crearProducto
+// crear un Cliente
+export async function createCliente(req,res){
+    // crearCliente
     try {
         const data = req.body
-        const result = await createProductoDB(data);
+        const result = await createClienteDB(data);
         res.status(201).json(result);
     } catch (error) {
         // 409: hay conflicto con la foreign key
@@ -46,15 +51,15 @@ export async function createProducto(req,res){
     }
 }
 
-// actualizar un producto (lean línea a línea y entren en las funciones o no entenderán nada)
-export async function updateProducto(req,res){
+// actualizar un Cliente (lean línea a línea y entren en las funciones o no entenderán nada)
+export async function updateCliente(req,res){
     try {
-        // Leer `id_producto` desde los params
-        const  id_producto  = req.params.id;
+        // Leer `id_Cliente` desde los query params ej: actualizar?id_Cliente=1
+        const  id_Cliente  = req.params.id; 
         // Leer el resto de los campos desde el body
         const data = req.body;
         // llamo al Model para manejar la DB apartir de aquí 
-        const result = await updateProductoDB(id_producto,data);
+        const result = await updateClienteDB(id_Cliente,data);
         res.status(201).json(result);
     } catch(error){
         const errorMsg = error.message;
@@ -65,20 +70,20 @@ export async function updateProducto(req,res){
 }
 
 
-// Eliminar Producto
-export async function deleteProductoById(req,res){
-    // Obtener todos los productos de la base de datos
+// Eliminar Cliente
+export async function deleteClienteById(req,res){
+    // Obtener todos los Clientes de la base de datos
     try {
         const id = parseInt(req.params.id, 10);
         if (isNaN(id)) {
             res.status(400).json({ Error: "El ID debe ser un número válido" });
             return;
         }
-        const result = await deleteProductoByIdDB(id);
+        const result = await deleteClienteByIdDB(id);
         res.status(200).json(result);
     } catch (error) {
         // 404 not found
-        const message = error.message == "Producto no encontrado" ? 404 : 500
+        const message = error.message == "Cliente no encontrado" ? 404 : 500
         res.status(message).json(error.message);
     }
 }

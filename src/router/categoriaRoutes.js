@@ -6,7 +6,10 @@ import {
     getCategoriaById, 
     updateCategoria 
 } from "../controller/categoriaController.js";
-import { reqControlCategoria } from "../middleware/reqCorreccionCategoria.js"; // Middleware específico para validar campos de categoría
+// Middleware específico para validar campos de categoría
+import { reqControlCategoria } from "../middleware/reqCorreccionCategoria.js"; 
+
+// Middleware para comprobar si el usuario es administrador o empleado
 import { esAdmin, tienePermiso } from "../middleware/comprobarRango.js";
 
 const router = Router(); // Usa la función Router de Express para construir las rutas

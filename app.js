@@ -4,6 +4,7 @@ import { seguridadInicial } from "./src/middleware/seguridadInicial.js";
 import userRoutes from "./src/router/userRoutes.js";
 import productoRoutes from "./src/router/productoRoutes.js";
 import categoriaRoutes from "./src/router/categoriaRoutes.js";
+import clienteRoutes from "./src/router/clienteRoutes.js";
 
 const app = express(); // traigo a Express 
 
@@ -15,12 +16,14 @@ app.use(express.json()); // avisarle a Express que voy a enviar JSON
 
 
 /************** Routes *************/
+// los ruteadores están en carpeta router
+app.use("/user",userRoutes) 
 
-app.use("/user",userRoutes) // el ruteador está en carpeta router: userRoutes.js
+app.use("/productos",productoRoutes) 
 
-app.use("/productos",productoRoutes) // el ruteador está en carpeta router: userRoutes.js
+app.use("/categorias",categoriaRoutes) 
 
-app.use("/categorias",categoriaRoutes) // el ruteador está en carpeta router: userRoutes.js
+app.use("/clientes",clienteRoutes) 
 
 
 // ruta default
