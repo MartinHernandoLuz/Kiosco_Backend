@@ -7,6 +7,8 @@ import categoriaRoutes from "./src/router/categoriaRoutes.js";
 import clienteRoutes from "./src/router/clienteRoutes.js";
 import ventasRoutes from "./src/router/ventaRoutes.js";
 
+import detalleVentasRoutes from "./src/router/detalleVentaRouter.js";
+
 const app = express(); // traigo a Express 
 
 seguridadInicial(app) // viene de carpeta Middlewares, es para poner todas las funciones de
@@ -27,6 +29,8 @@ app.use("/categorias",categoriaRoutes)
 app.use("/clientes",clienteRoutes) 
 
 app.use("/ventas",ventasRoutes) 
+
+app.use("/detalle-ventas",detalleVentasRoutes) 
 
 // ruta default
 app.use("/",(req,res)=>{
