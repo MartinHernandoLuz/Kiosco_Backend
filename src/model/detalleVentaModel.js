@@ -12,10 +12,10 @@ export const getAllDetallesVentaDB = async () => {
 };
 
 // Obtener un detalle de venta por ID_Venta y ID_Producto
-export const getDetalleVentaByIdDB = async (ID_Venta, ID_Producto) => {
+export const getDetalleVentaByIdDB = async (ID_Detalle) => {
   try {
-    const query = "SELECT * FROM detalle_venta WHERE ID_Venta = ? AND ID_Producto = ?";
-    const [rows] = await db.query(query, [ID_Venta, ID_Producto]);
+    const query = "SELECT * FROM detalle_venta WHERE ID_Detalle = ?";
+    const [rows] = await db.query(query, [ID_Detalle]);
     if (rows.length === 0) {
       throw new Error("Detalle de venta no encontrado");
     }
@@ -36,8 +36,8 @@ export const createDetalleVentaDB = async (data) => {
     const [ventaCheck] = await db.query(ventaExiste, [ID_Venta]);
     const [productoCheck] = await db.query(productoExiste, [ID_Producto]);
 
-    if (ventaCheck.length === 0) throw new Error("Venta no encontrada");
-    if (productoCheck.length === 0) throw new Error("Producto no encontrado");
+    if (ventaCheck.length === 0) throw new Error("Venta no existe");
+    if (productoCheck.length === 0) throw new Error("Producto no existe");
 
     const query = `INSERT INTO detalle_venta (ID_Venta, ID_Producto, cantidad, precio_unitario) 
                    VALUES (?, ?, ?, ?)`;
@@ -49,13 +49,36 @@ export const createDetalleVentaDB = async (data) => {
 };
 
 // Actualizar un detalle de venta
-export const updateDetalleVentaDB = async (ID_Venta, ID_Producto, data) => {
+export const updateDetalleVentaDB = async (id_detalle, data) => {
   try {
-    const { cantidad, precio_unitario } = data;
+    if (!id_detalle) {
+      throw new Error("El campo 'ID_Detalle' es obligatorio");
+    }
 
+    // Verificar si el registro existe
+    const [DetalleExistente] = await db.query(
+      "SELECT * FROM detalle_venta WHERE ID_Detalle = ?",
+      [id_detalle]
+    );
+    if (DetalleExistente.length === 0) {
+      throw new Error("El detalle de venta con el ID especificado no existe");
+    }
+
+
+    const { ID_Venta, ID_Producto, cantidad, precio_unitario} = data;
+
+    // Construir dinámicamente los campos a actualizar
     const fieldsToUpdate = [];
     const values = [];
 
+    if (ID_Venta) {
+      fieldsToUpdate.push("ID_Venta = ?");
+      values.push(ID_Venta);
+    }
+    if (ID_Producto) {
+      fieldsToUpdate.push("ID_Producto = ?");
+      values.push(ID_Producto);
+    }
     if (cantidad) {
       fieldsToUpdate.push("cantidad = ?");
       values.push(cantidad);
@@ -66,13 +89,16 @@ export const updateDetalleVentaDB = async (ID_Venta, ID_Producto, data) => {
     }
 
     if (fieldsToUpdate.length === 0) {
-      throw new Error("No se ha proporcionado ningún dato para actualizar");
+      throw new Error("Debe proporcionar al menos un campo para actualizar");
     }
 
-    values.push(ID_Venta, ID_Producto);
+    // Añadir el ID_Detalle al final de los valores
+    values.push(id_detalle);
 
-    const query = `UPDATE detalle_venta SET ${fieldsToUpdate.join(", ")} 
-                   WHERE ID_Venta = ? AND ID_Producto = ?`;
+
+
+    // Construir y ejecutar la consulta de actualización
+    const query = `UPDATE detalle_venta SET ${fieldsToUpdate.join(", ")} WHERE ID_Detalle = ?`;
     await db.query(query, values);
 
     return "Detalle de venta actualizado exitosamente";
@@ -81,15 +107,23 @@ export const updateDetalleVentaDB = async (ID_Venta, ID_Producto, data) => {
   }
 };
 
+
 // Eliminar un detalle de venta
-export const deleteDetalleVentaDB = async (ID_Venta, ID_Producto) => {
+export const deleteDetalleVentaDB = async (id) => {
   try {
-    const query = "DELETE FROM detalle_venta WHERE ID_Venta = ? AND ID_Producto = ?";
-    const [result] = await db.query(query, [ID_Venta, ID_Producto]);
+    const sentence1 = "SELECT * FROM detalle_venta WHERE id_detalle = ?";
+    const [rows1] = await db.query(sentence1,[id]);
+    if(rows1.length == 0) {
+      throw new Error("Detalle de venta no encontrado");
+    }
+
+
+    const query = "DELETE FROM detalle_venta WHERE ID_Detalle = ?";
+    const [result] = await db.query(query, [id]);
     if (result.affectedRows === 0) {
       throw new Error("Detalle de venta no encontrado");
     }
-    return "Detalle de venta eliminado exitosamente";
+    return ({Detalle: rows1[0], Estado: "Eliminado"});
   } catch (error) {
     throw error;
   }

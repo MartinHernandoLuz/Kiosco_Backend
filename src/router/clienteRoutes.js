@@ -8,7 +8,7 @@ const router = Router() // usa la función Router de Express, para construir las
 router.get("/",getAllClientes) //
 router.get("/:id",getClienteById)
 router.post("/crear",tienePermiso,reqControlCliente,createCliente)
-router.put("/actualizar",tienePermiso,reqControlUpdateCliente,updateCliente)
+router.put("/actualizar/:id",tienePermiso,reqControlUpdateCliente,updateCliente)
 router.delete("/eliminar/:id",esAdmin,deleteClienteById)
 
 

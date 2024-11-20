@@ -1,3 +1,4 @@
 /0podkwa
 /node_modules
 .env
+/coverage

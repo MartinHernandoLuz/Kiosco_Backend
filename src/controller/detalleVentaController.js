@@ -18,8 +18,8 @@ import {
   
   export async function getDetalleVentaById(req, res) {
     try {
-      const { ID_Venta, ID_Producto } = req.params;
-      const result = await getDetalleVentaByIdDB(ID_Venta, ID_Producto);
+      const  id  = req.params.id;
+      const result = await getDetalleVentaByIdDB(id);
       res.status(200).json(result);
     } catch (error) {
       const message = error.message === "Detalle de venta no encontrado" ? 404 : 500;
@@ -39,9 +39,9 @@ import {
   
   export async function updateDetalleVenta(req, res) {
     try {
-      const { ID_Venta, ID_Producto } = req.params;
+      const id = req.params.id;
       const data = req.body;
-      const result = await updateDetalleVentaDB(ID_Venta, ID_Producto, data);
+      const result = await updateDetalleVentaDB(id, data);
       res.status(200).json(result);
     } catch (error) {
       errorsUpdate(error.message, res);
@@ -50,8 +50,8 @@ import {
   
   export async function deleteDetalleVenta(req, res) {
     try {
-      const { ID_Venta, ID_Producto } = req.params;
-      const result = await deleteDetalleVentaDB(ID_Venta, ID_Producto);
+      const id = req.params.id;
+      const result = await deleteDetalleVentaDB(id);
       res.status(200).json(result);
     } catch (error) {
       const message = error.message === "Detalle de venta no encontrado" ? 404 : 500;

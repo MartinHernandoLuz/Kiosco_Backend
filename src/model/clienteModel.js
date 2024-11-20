@@ -92,6 +92,8 @@ export const updateClienteDB = async (id_Cliente, data) => {
       if (!id_Cliente) {
         throw new Error("El campo 'id_Cliente' es obligatorio");
       }
+
+      
   
       // Paso 2: Verificar que al menos uno de los campos adicionales esté presente
       if (!nombre && !apellido && !dni && !telefono && !mail) {

@@ -14,10 +14,10 @@ import {
 const router = Router();
 
 router.get("/", getAllDetallesVenta);
-router.get("/:ID_Venta/:ID_Producto", getDetalleVentaById);
-router.post("/", reqControlDetalleVenta, createDetalleVenta);
-router.put("/:ID_Venta/:ID_Producto", reqControlUpdateDetalleVenta, updateDetalleVenta);
-router.delete("/:ID_Venta/:ID_Producto", deleteDetalleVenta);
+router.get("/:id", getDetalleVentaById);
+router.post("/crear", reqControlDetalleVenta, createDetalleVenta);
+router.put("/actualizar/:id", reqControlUpdateDetalleVenta, updateDetalleVenta);
+router.delete("/eliminar/:id", deleteDetalleVenta);
 
 router.use((req, res) => {
   res.status(404).json({ error: "Ruta no encontrada", path: req.originalUrl });
