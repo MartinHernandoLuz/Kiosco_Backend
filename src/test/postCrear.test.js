@@ -1,4 +1,4 @@
-/*import app from '../../app.js'
+import app from '../../app.js'
 import request from 'supertest'
 import db from '../config/db.js';
 import jwt from 'jsonwebtoken';
@@ -70,5 +70,4 @@ describe("POST /crear - Ruta para crear categoría", () => {
       /*
       afterAll(async () => {
         await db.end(); // Cerrar conexión con la base de datos si usas MySQL o similar
-});
-*/
+});*/
