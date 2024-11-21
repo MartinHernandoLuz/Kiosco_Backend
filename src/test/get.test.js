@@ -1,8 +1,6 @@
 import app from '../../app.js'
 import request from 'supertest'
-import db from '../config/db.js';
 
-const token = "tu-token-aquí"; 
 
 describe('GetAll', () => {
 
