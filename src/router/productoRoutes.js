@@ -2,14 +2,15 @@ import { Router } from "express";
 import { createProducto, deleteProductoById, getAllProductos, getProductoById, updateProducto } from "../controller/productoController.js";
 import {reqControlProducto, reqControlUpdateProducto} from "../middleware/reqCorrecionProducto.js"
 import { esAdmin, tienePermiso } from "../middleware/comprobarRango.js";
+import { vieneID } from "../middleware/vieneID.js";
 
 const router = Router() // usa la función Router de Express, para construir las rutas 
 
 router.get("/",getAllProductos) //
-router.get("/:id",getProductoById)
+router.get("/:id",vieneID,getProductoById)
 router.post("/crear",tienePermiso,reqControlProducto,createProducto)
-router.put("/actualizar/:id",tienePermiso,reqControlUpdateProducto,updateProducto)
-router.delete("/eliminar/:id",esAdmin,deleteProductoById)
+router.put("/actualizar/:id",vieneID,tienePermiso,reqControlUpdateProducto,updateProducto)
+router.delete("/eliminar/:id",vieneID,esAdmin,deleteProductoById)
 
 
 

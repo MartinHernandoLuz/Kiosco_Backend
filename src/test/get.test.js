@@ -2,6 +2,8 @@ import app from '../../app.js'
 import request from 'supertest'
 import db from '../config/db.js';
 
+const token = "tu-token-aquí"; 
+
 describe('GetAll', () => {
 
     it('GET / - debería devolver un estado 200 y un mensaje', async () => {
@@ -156,7 +158,9 @@ describe('GetAllByID', () => {
     });
 });
 
+
+/*
 afterAll(async () => {
     await db.end(); // Cerrar conexión con la base de datos si usas MySQL o similar
-    //app.close(); // Si tienes un servidor activo, ciérralo
 });
+*/

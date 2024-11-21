@@ -40,7 +40,7 @@ export const createCategoriaDB = async (data) => {
     // Insertar una nueva categoría
     const sentence = "INSERT INTO categoria (nombre) VALUES (?)";
     await db.query(sentence, [nombre]);
-    return "Categoría creada exitosamente";
+    return {message:"Categoría creada exitosamente"};
   } catch (error) {
     throw error;
   }

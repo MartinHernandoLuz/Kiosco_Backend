@@ -6,7 +6,7 @@ export const tienePermiso = async (req, res, next) => {
   // Paso 1: Obtener el token del encabezado de autorización
   const token = req.headers.authorization && req.headers.authorization.split(' ')[1];
   if (!token) {
-    return res.status(401).json({ error: 'Token no proporcionado' });
+    return res.status(400).json({ error: 'Token no proporcionado' });
   }
 
   try {
@@ -30,7 +30,7 @@ export const tienePermiso = async (req, res, next) => {
       res.status(403).json({ error: 'Acceso denegado: permisos insuficientes' });
     }
   } catch (error) {
-    res.status(401).json({ error: 'Token no válido o expirado' });
+    res.status(403).json({ error: 'Token no válido o expirado' });
   }
 };
 
