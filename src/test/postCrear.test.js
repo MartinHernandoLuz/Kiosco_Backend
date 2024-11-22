@@ -14,15 +14,18 @@ describe("POST /crear - Ruta para crear categoría", () => {
     // Reemplaza con tu token válido
         let connection;
       
-        beforeAll(async () => {
+        beforeEach(async () => {
           // Iniciar una conexión para la transacción
-          connection = await db.getConnection();
-          await connection.beginTransaction();
+          await db.query("BEGIN")
         });
-      
+        
+        afterEach(async () => {
+          // Realizar el rollback de la transacción
+          await db.query("ROLLBACK")
+        })
         
         it("Debería crear una categoría correctamente", async () => {
-          const categoriaData = {"nombre": "Categoría de Prueba"};
+          const categoriaData = {"nombre": "fulbito"};
           
           const response = await request(app)
           .post("/categorias/crear")
@@ -60,11 +63,7 @@ describe("POST /crear - Ruta para crear categoría", () => {
           expect(response.body).toMatchObject({error: 'Token no válido o expirado'});
         });
        
-        afterAll(async () => {
-          // Realizar el rollback de la transacción
-          await connection.rollback();
-          await connection.release();
-        });
+
       });
       
       /*
