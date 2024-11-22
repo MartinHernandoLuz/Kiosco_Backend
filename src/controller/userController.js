@@ -1,16 +1,16 @@
-import {createUserDB, loginUserDB} from '../model/userModel.js'
+import { createUserDB, loginUserDB } from '../model/userModel.js'
 
 // función para crear el usuario
 export const createUser = async (req, res) => {
     const data = req.body; // saca la data Email y contraseña
     try {
         // envía data a una función que está en userModel.js
-        const result = await createUserDB(data); 
+        const result = await createUserDB(data);
         res.status(201).json(result); // si funciona, envía un 201 CREATED
     } catch (error) {
         // si hay error, envía el que llega por error o 500 INTERNAL por default
         const statusCode = error.message === "Email ya está en uso" ? 400 : 500;
-        res.status(statusCode).json({"Error":error.message});
+        res.status(statusCode).json({ "Error": error.message });
     }
 }
 
@@ -22,7 +22,8 @@ export const loginUser = async (req, res) => {
         const result = await loginUserDB(data);
         res.status(201).json(result); // si funciona, envía un 201 CREATED
     } catch (error) {
+        const errorStatus = error.message == "Contraseña incorrecta" || "Email no encontrado" ? 400 : 500
         // si hay error, envía el que llega por error o 500 INTERNAL por default
-        res.status(error.status || 500).json(error.message);
+        res.status(errorStatus).json({ Error: error.message });
     }
 }
