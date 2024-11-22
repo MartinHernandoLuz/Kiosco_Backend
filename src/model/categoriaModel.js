@@ -81,7 +81,7 @@ export const updateCategoriaDB = async (id_categoria, data) => {
     const query = `UPDATE categoria SET ${fieldsToUpdate.join(", ")} WHERE ID_Categoria = ?`;
     await db.query(query, values);
 
-    return "Categoría actualizada exitosamente";
+    return {message: "Categoría actualizada exitosamente"};
   } catch (error) {
     throw error;
   }

@@ -30,7 +30,7 @@ export const tienePermiso = async (req, res, next) => {
       res.status(403).json({ error: 'Acceso denegado: permisos insuficientes' });
     }
   } catch (error) {
-    res.status(403).json({ error: 'Token no válido o expirado' });
+    res.status(401).json({ error: 'Token no válido o expirado' });
   }
 };
 

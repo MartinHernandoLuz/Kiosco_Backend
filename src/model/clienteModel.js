@@ -75,7 +75,7 @@ export const createClienteDB = async (data) => {
       
       // Ejecutar la query
       await db.query(sentence, valores);
-      return "Cliente creado exitosamente";
+      return {message:"Cliente creado exitosamente"};
     } catch (error) {
         throw error;
     }
@@ -138,7 +138,7 @@ export const updateClienteDB = async (id_Cliente, data) => {
       const query = `UPDATE cliente SET ${fieldsToUpdate.join(', ')} WHERE id_Cliente = ?`;
       await db.query(query, values);
   
-      return "Cliente actualizado exitosamente";
+      return {message:"Cliente actualizado exitosamente"};
     } catch (error) {
       throw error;
     }
