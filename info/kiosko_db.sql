@@ -26,7 +26,7 @@ CREATE TABLE `categoria` (
   `ID_Categoria` int NOT NULL AUTO_INCREMENT,
   `nombre` varchar(45) NOT NULL,
   PRIMARY KEY (`ID_Categoria`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -35,7 +35,7 @@ CREATE TABLE `categoria` (
 
 LOCK TABLES `categoria` WRITE;
 /*!40000 ALTER TABLE `categoria` DISABLE KEYS */;
-INSERT INTO `categoria` VALUES (1,'Limpieza'),(2,'Alimentos'),(3,'Bebidas'),(4,'Dulces y Golosinas'),(5,'Electrónica'),(6,'Hogar'),(7,'Juguetería'),(8,'Papelería'),(9,'Ropa y Accesorios'),(10,'Mascotas');
+INSERT INTO `categoria` VALUES (1,'Limpieza'),(2,'Alimentos'),(3,'Bebidas'),(4,'Dulces y Golosinas'),(5,'Electrónica'),(6,'Hogar'),(7,'Juguetería'),(8,'Papelería'),(9,'Ropa y Accesorios'),(10,'Mascotas'),(11,'tecnología y periféricos'),(20,'capital');
 /*!40000 ALTER TABLE `categoria` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -133,7 +133,7 @@ CREATE TABLE `producto` (
   PRIMARY KEY (`ID_Producto`),
   KEY `ID_Categoria_idx` (`ID_Categoria`),
   CONSTRAINT `ID_Categoria` FOREIGN KEY (`ID_Categoria`) REFERENCES `categoria` (`ID_Categoria`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -142,7 +142,7 @@ CREATE TABLE `producto` (
 
 LOCK TABLES `producto` WRITE;
 /*!40000 ALTER TABLE `producto` DISABLE KEYS */;
-INSERT INTO `producto` VALUES (1,'ALA',78.9,40,1),(2,'IncaCola',500,3000,3);
+INSERT INTO `producto` VALUES (1,'ALA',78.9,40,1),(2,'IncaCola',500,3000,3),(3,'Guany',700,400,2),(4,'EavyMetal Soda',12000,500,2),(5,'The Singular Soda',12200,100,2),(7,'The Soda Big Cheese',1500,700,2);
 /*!40000 ALTER TABLE `producto` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -160,7 +160,7 @@ CREATE TABLE `usuario` (
   `rango` enum('cliente','empleado','administrador') DEFAULT 'cliente',
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -169,7 +169,7 @@ CREATE TABLE `usuario` (
 
 LOCK TABLES `usuario` WRITE;
 /*!40000 ALTER TABLE `usuario` DISABLE KEYS */;
-INSERT INTO `usuario` VALUES (1,'juan.perez@example.com','$2a$10$VDdqV3IJI7iXnkrHvGl9PeXHsPFISb92FRZ0S.LtC8iQxVOZ4S6Au','cliente'),(3,'rumba.correo@example.com','$2a$10$/whym896mCw2fl6wn1D3fu1NL/Zv6/NysrtsAi54Ym8k7ihgHYBWG','cliente');
+INSERT INTO `usuario` VALUES (1,'juan.perez@example.com','$2a$10$VDdqV3IJI7iXnkrHvGl9PeXHsPFISb92FRZ0S.LtC8iQxVOZ4S6Au','empleado'),(3,'rumba.correo@example.com','$2a$10$/whym896mCw2fl6wn1D3fu1NL/Zv6/NysrtsAi54Ym8k7ihgHYBWG','cliente'),(8,'admin.admin@example.com','$2a$10$vVgHrFyDPBpRFIIjtA4GteHOAt7HKBAWIcHvRSj6MzS7tcvkKbB3u','administrador');
 /*!40000 ALTER TABLE `usuario` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -210,4 +210,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-11-11  9:52:09
+-- Dump completed on 2024-11-22  9:42:35
