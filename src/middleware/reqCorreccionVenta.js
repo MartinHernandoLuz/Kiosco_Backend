@@ -11,6 +11,10 @@ export const reqControlVenta = [
     body("total")
         .exists().withMessage("El total es obligatorio")
         .isFloat({ gt: 0 }).withMessage("El total debe ser un número positivo"),
+    // Validación para "total"
+    body("id_vendedor")
+        .exists().withMessage("El id_vendedor es obligatorio")
+        .isInt({ gt: 0 }).withMessage("El id_vendedor debe ser un número entero positivo"),
 
     // Manejo de errores de validación
     (req, res, next) => {
@@ -38,6 +42,10 @@ export const reqControlUpdateVenta = [
     body("fecha")
         .optional()
         .isISO8601().withMessage("La fecha debe estar en formato válido (ISO 8601)"),
+
+    body("id_vendedor")
+        .optional()
+        .isInt({ gt: 0 }).withMessage("El id_vendedor debe ser un número entero positivo"),
 
     // Manejo de errores de validación
     (req, res, next) => {

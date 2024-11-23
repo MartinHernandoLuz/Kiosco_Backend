@@ -28,7 +28,7 @@ export const getVentaByIdDB = async (id) => {
 // Crear una nueva venta
 export const createVentaDB = async (data) => {
   try {
-    const { ID_Cliente, total } = data;
+    const { ID_Cliente, total, id_vendedor } = data;
 
     // Verificar que el cliente exista en la base de datos
     const comprobarCliente = "SELECT * FROM cliente WHERE id_Cliente = ?";
@@ -38,8 +38,8 @@ export const createVentaDB = async (data) => {
     }
 
     // Insertar una nueva venta
-    const sentence = "INSERT INTO venta (ID_Cliente, total) VALUES (?, ?)";
-    await db.query(sentence, [ID_Cliente, total]);
+    const sentence = "INSERT INTO venta (ID_Cliente, total,id_vendedor) VALUES (?, ?, ?)";
+    await db.query(sentence, [ID_Cliente, total, id_vendedor]);
 
     return "Venta creada exitosamente";
   } catch (error) {
@@ -50,7 +50,7 @@ export const createVentaDB = async (data) => {
 // Actualizar una venta
 export const updateVentaDB = async (id_venta, data) => {
   try {
-    const { ID_Cliente, total, fecha } = data;
+    const { ID_Cliente, total, fecha, id_vendedor } = data;
 
     // Verificar que `id_venta` esté presente
     if (!id_venta) {
@@ -59,7 +59,7 @@ export const updateVentaDB = async (id_venta, data) => {
 
     // Verificar que al menos uno de los campos esté presente
     if (!ID_Cliente && !total && !fecha) {
-      throw new Error("Debe proporcionar al menos uno de los siguientes campos: ID_Cliente, total, fecha");
+      throw new Error("Debe proporcionar al menos uno de los siguientes campos: ID_Cliente, total, fecha, id_vendedor");
     }
 
     // Verificar que la venta exista
@@ -94,6 +94,11 @@ export const updateVentaDB = async (id_venta, data) => {
       fieldsToUpdate.push("fecha = ?");
       values.push(fecha);
     }
+    if (id_vendedor) {
+      fieldsToUpdate.push("id_vendedor = ?");
+      values.push(id_vendedor);
+    }
+
 
     // Si no hay campos a actualizar, retornar un error
     if (fieldsToUpdate.length === 0) {

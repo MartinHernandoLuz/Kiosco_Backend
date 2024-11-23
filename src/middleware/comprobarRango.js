@@ -2,6 +2,26 @@ import jwt from 'jsonwebtoken';
 import db from '../config/db.js'; // Importa tu archivo de conexión a la base de datos
 
 
+export const tienePermisoAux = async (req, res, next) => {
+  const token = req.headers.authorization && req.headers.authorization.split(' ')[1];
+  if (!token) {
+    return res.status(400).json({ error: 'Token no proporcionado' });
+  }
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const rango = decoded.rango;
+
+    if (rango === 'empleado' || rango === 'administrador') {
+      next(); // Permitir acceso si tiene el rango adecuado
+    } else {
+      res.status(403).json({ error: 'Acceso denegado: permisos insuficientes' });
+    }
+  } catch (e) {
+    res.status(401).json({ error: 'Token no válido o expirado' });
+  }
+}
+
 export const tienePermiso = async (req, res, next) => {
   // Paso 1: Obtener el token del encabezado de autorización
   const token = req.headers.authorization && req.headers.authorization.split(' ')[1];
