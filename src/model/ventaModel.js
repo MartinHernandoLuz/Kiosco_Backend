@@ -58,7 +58,7 @@ export const updateVentaDB = async (id_venta, data) => {
     }
 
     // Verificar que al menos uno de los campos esté presente
-    if (!ID_Cliente && !total && !fecha) {
+    if (!ID_Cliente && !total && !fecha && !id_vendedor) {
       throw new Error("Debe proporcionar al menos uno de los siguientes campos: ID_Cliente, total, fecha, id_vendedor");
     }
 
