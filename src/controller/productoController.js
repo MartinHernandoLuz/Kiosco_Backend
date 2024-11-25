@@ -1,8 +1,8 @@
-import {getAllProductosDB,getProductoByIdDB,createProductoDB, updateProductoDB, deleteProductoByIdDB} from '../model/productoModel.js'
+import { getAllProductosDB, getProductoByIdDB, createProductoDB, updateProductoDB, deleteProductoByIdDB } from '../model/productoModel.js'
 import { errorsUpdate } from '../others/errorsUpdateProducto.js';
 
 // obtener todos los productos
-export async function getAllProductos(req,res){
+export async function getAllProductos(req, res) {
     // Obtener todos los productos de la base de datos
     try {
         const result = await getAllProductosDB();
@@ -15,7 +15,7 @@ export async function getAllProductos(req,res){
 }
 
 // obtener un producto por id
-export async function getProductoById(req,res){
+export async function getProductoById(req, res) {
     // Obtener todos los productos de la base de datos
     try {
         const id = req.params.id
@@ -33,12 +33,12 @@ export async function getProductoById(req,res){
 }
 
 // crear un producto
-export async function createProducto(req,res){
+export async function createProducto(req, res) {
     // crearProducto
     try {
         const data = req.body
         const result = await createProductoDB(data);
-        res.status(201).json(result);
+        res.status(201).json({ message: result });
     } catch (error) {
         // 409: hay conflicto con la foreign key
         const message = error.message == "La categoría no existe" ? 409 : 500
@@ -47,26 +47,26 @@ export async function createProducto(req,res){
 }
 
 // actualizar un producto (lean línea a línea y entren en las funciones o no entenderán nada)
-export async function updateProducto(req,res){
+export async function updateProducto(req, res) {
     try {
         // Leer `id_producto` desde los params
-        const  id_producto  = req.params.id;
+        const id_producto = req.params.id;
         // Leer el resto de los campos desde el body
         const data = req.body;
         // llamo al Model para manejar la DB apartir de aquí 
-        const result = await updateProductoDB(id_producto,data);
-        res.status(201).json(result);
-    } catch(error){
+        const result = await updateProductoDB(id_producto, data);
+        res.status(201).json({ message: result });
+    } catch (error) {
         const errorMsg = error.message;
         // hay demaciados errores posibles, así que lo envié a la carpeta others
         // envio res para que pueda disparar la función allí
-        errorsUpdate(errorMsg,res);
+        errorsUpdate(errorMsg, res);
     }
 }
 
 
 // Eliminar Producto
-export async function deleteProductoById(req,res){
+export async function deleteProductoById(req, res) {
     // Obtener todos los productos de la base de datos
     try {
         const id = parseInt(req.params.id, 10);

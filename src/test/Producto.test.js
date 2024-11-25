@@ -16,7 +16,9 @@ const tokenAdmin = jwt.sign(
 );
 
 
-describe("POST /crear - Ruta para crear categoria", () => {
+
+describe("POST /crear - Ruta para crear producto", () => {
+
   beforeEach(async () => {
     // Iniciar una conexión para la transacción
     await db.query("BEGIN")
@@ -27,23 +29,33 @@ describe("POST /crear - Ruta para crear categoria", () => {
     await db.query("ROLLBACK")
   })
 
-  /*####################################################*/
-  it("Debería crear una categoría correctamente", async () => {
-    const categoriaData = { "nombre": "fulbito" };
+
+  //##########################################
+
+  it("Debería crear un Producto correctamente", async () => {
+    const productoData = {
+      "nombre": "HP",
+      "precio": "1000000",
+      "stock": "30",
+      "ID_Categoria": "5"
+    };
 
     const response = await request(app)
-      .post("/categorias/crear")
+      .post("/productos/crear")
       .set("Authorization", `Bearer ${token}`) // Aquí va el token
-      .send(categoriaData);
+      .send(productoData);
 
     // Verificar la respuesta
-    expect(response.body).toHaveProperty("message", "Categoría creada exitosamente");
+    expect(response.body).toEqual(
+      expect.objectContaining({
+        message: "Producto creado exitosamente",
+      }));
     expect(response.statusCode).toBe(201);
   });
 
-  it("Debería devolver un error si no se envía el nombre", async () => {
+  it("Debería devolver un error si no se envía el body", async () => {
     const response = await request(app)
-      .post("/categorias/crear")
+      .post("/productos/crear")
       .set("Authorization", `Bearer ${token}`) // Aquí va el token
       .send({}); // Enviar un cuerpo vacío
 
@@ -59,9 +71,9 @@ describe("POST /crear - Ruta para crear categoria", () => {
 
   it("Debería devolver un error si el token es inválido", async () => {
     const response = await request(app)
-      .post("/categorias/crear")
+      .post("/productos/crear")
       .set("Authorization", `Bearer invalidtoken`) // Token inválido
-      .send({ nombre: "Categoría Inválida" });
+      .send({ nombre: "Producto Inválida" });
 
     expect(response.statusCode).toBe(401); // Acceso prohibido
     expect(response.body).toMatchObject({ error: 'Token no válido o expirado' });
@@ -73,7 +85,7 @@ describe("POST /crear - Ruta para crear categoria", () => {
 
 
 
-describe("PUT /actualizar/:id - Ruta para actualizar categoria", () => {
+describe("PUT /actualizar/:id - Ruta para actualizar producto", () => {
   beforeEach(async () => {
     // Iniciar una conexión para la transacción
     await db.query("BEGIN")
@@ -87,25 +99,25 @@ describe("PUT /actualizar/:id - Ruta para actualizar categoria", () => {
 
 
 
-  it("Debería actualizar una categoría correctamente", async () => {
-    const categoriaData = { "nombre": "voley" };
+  it("Debería actualizar un Producto correctamente", async () => {
+    const productoData = { "nombre": "voley" };
 
     const response = await request(app)
-      .put("/categorias/actualizar/1")
+      .put("/productos/actualizar/1")
       .set("Authorization", `Bearer ${token}`) // Aquí va el token
-      .send(categoriaData);
+      .send(productoData);
 
     // Verificar la respuesta
     expect(response.body).toEqual(
       expect.objectContaining({
-        message: "Categoría actualizada exitosamente",
+        message: "Producto actualizado exitosamente",
       }));
     expect(response.statusCode).toBe(201);
   });
 
   it("Debería devolver un error si no se envía el ID", async () => {
     const response = await request(app)
-      .put("/categorias/actualizar/f")
+      .put("/productos/actualizar/f")
       .set("Authorization", `Bearer ${token}`) // Aquí va el token
       .send({}); // Enviar un cuerpo vacío
 
@@ -117,27 +129,28 @@ describe("PUT /actualizar/:id - Ruta para actualizar categoria", () => {
     );
   });
 
-  it("Debería devolver un error si no se envía el nombre u otro dato", async () => {
+  it("Debería devolver un error si no se envía nada", async () => {
     const response = await request(app)
-      .put("/categorias/actualizar/1")
+      .put("/productos/actualizar/1")
       .set("Authorization", `Bearer ${token}`) // Aquí va el token
       .send({}); // Enviar un cuerpo vacío
 
-    expect(response.statusCode).toBe(400); // Error de validación
-    expect(response.body.errors).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({
-          msg: "El nombre es obligatorio"
-        })
-      ])
+    // Verificar el estado HTTP
+    expect(response.statusCode).toBe(400);
+
+    expect(response.body).toEqual(
+      expect.objectContaining({
+        Error: "Debe proporcionar al menos uno de los siguientes campos en el cuerpo de la solicitud: nombre, precio, stock, ID_Categoria"
+      })
     );
+
   });
 
   it("Debería devolver un error si el token es inválido", async () => {
     const response = await request(app)
-      .put("/categorias/actualizar/1")
+      .put("/productos/actualizar/1")
       .set("Authorization", `Bearer invalidtoken`) // Token inválido
-      .send({ nombre: "Categoría Inválida" });
+      .send({ nombre: "Producto Inválida" });
 
     expect(response.statusCode).toBe(401); // Acceso prohibido
     expect(response.body).toMatchObject({ error: 'Token no válido o expirado' });
@@ -149,7 +162,7 @@ describe("PUT /actualizar/:id - Ruta para actualizar categoria", () => {
 
 
 
-describe("DELETE /eliminar/:id - Ruta para eliminar una categoría", () => {
+describe("DELETE /eliminar/:id - Ruta para eliminar un Producto", () => {
   beforeEach(async () => {
     // Iniciar una conexión para la transacción
     await db.query("BEGIN")
@@ -160,17 +173,17 @@ describe("DELETE /eliminar/:id - Ruta para eliminar una categoría", () => {
     await db.query("ROLLBACK")
   })
 
-  it("Debería eliminar una categoría correctamente", async () => {
+  it("Debería eliminar una Producto correctamente", async () => {
 
     const response = await request(app)
-      .delete("/categorias/eliminar/1")
+      .delete("/productos/eliminar/1")
       .set("Authorization", `Bearer ${tokenAdmin}`) // Aquí va el token
 
     // Verificar la respuesta
     expect(response.body).toEqual(
       expect.objectContaining({
-        Categoria: expect.any(Object), // Confirmar que 'Categoria' sea un objeto
-        Estado: "Eliminada",          // Confirmar que el estado sea "Eliminada"
+        Producto: expect.any(Object), // Confirmar que 'Producto' sea un objeto
+        Estado: "Eliminado",          // Confirmar que el estado sea "Eliminada"
       })
     );
     expect(response.statusCode).toBe(200);
@@ -178,7 +191,7 @@ describe("DELETE /eliminar/:id - Ruta para eliminar una categoría", () => {
 
   it("Debería fallar el acceso", async () => {
     const response = await request(app)
-      .delete("/categorias/eliminar/1")
+      .delete("/productos/eliminar/1")
       .set("Authorization", `Bearer ${token}`); // Aquí va el token
 
     // Verificar la respuesta
@@ -193,9 +206,9 @@ describe("DELETE /eliminar/:id - Ruta para eliminar una categoría", () => {
   });
 
 
-  it("Debería devolver un error si no se envía el nombre", async () => {
+  it("Debería devolver un error si no se envía el ID", async () => {
     const response = await request(app)
-      .delete("/categorias/eliminar/f")
+      .delete("/productos/eliminar/f")
       .set("Authorization", `Bearer ${token}`) // Aquí va el token
 
     expect(response.statusCode).toBe(400); // Error de validación
@@ -210,7 +223,7 @@ describe("DELETE /eliminar/:id - Ruta para eliminar una categoría", () => {
 
   it("Debería devolver un error si el token es inválido", async () => {
     const response = await request(app)
-      .delete("/categorias/eliminar/1")
+      .delete("/productos/eliminar/1")
       .set("Authorization", `Bearer invalidtoken`) // Token inválido
 
     expect(response.statusCode).toBe(401); // Acceso prohibido
