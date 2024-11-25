@@ -3,7 +3,8 @@ import {
     getVentaByIdDB,
     createVentaDB,
     updateVentaDB,
-    deleteVentaByIdDB
+    deleteVentaByIdDB,
+    getVentasEntreFechasDB
 } from '../model/ventaModel.js';
 import { errorsUpdateVenta } from '../others/errorsUpdateVenta.js';
 
@@ -32,6 +33,20 @@ export async function getVentaById(req, res) {
         res.status(message).json({ Error: error.message });
     }
 }
+
+export async function getVentasEntreFechas(req, res) {
+    try {
+        const startDate = req.query.startDate
+        const endDate = req.query.endDate
+
+        const result = await getVentasEntreFechasDB(startDate, endDate);
+        res.status(200).json(result);
+    } catch (error) {
+        const message = error.message === "Venta no encontrada" ? 404 : 500;
+        res.status(message).json({ Error: error.message });
+    }
+}
+
 
 // Crear una nueva venta
 export async function createVenta(req, res) {

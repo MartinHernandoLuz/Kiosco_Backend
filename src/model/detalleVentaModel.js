@@ -25,6 +25,27 @@ export const getDetalleVentaByIdDB = async (ID_Detalle) => {
   }
 };
 
+// Obtener full detalle sobre la venta
+export const getFullDetalleByIdDB = async (ID_Detalle) => {
+  try {
+    const query = "SELECT producto.nombre as producto,cantidad,subtotal, venta.fecha, cliente.nombre as nombre_cliente,\
+                    usuario.email as vendedor \
+                    FROM detalle_venta \
+                    INNER JOIN venta ON detalle_venta.id_venta = venta.id_venta \
+                    inner join usuario on venta.id_vendedor = usuario.id_usuario \
+                    INNER JOIN cliente ON venta.ID_Cliente = cliente.ID_Cliente \
+                    inner join producto on detalle_venta.ID_Producto = producto.ID_Producto \
+                    WHERE ID_Detalle = ?";
+    const [rows] = await db.query(query, [ID_Detalle]);
+    if (rows.length === 0) {
+      throw new Error("Detalle de venta no encontrado");
+    }
+    return rows[0];
+  } catch (error) {
+    throw error;
+  }
+};
+
 // Crear un nuevo detalle de venta
 export const createDetalleVentaDB = async (data) => {
   try {
@@ -65,7 +86,7 @@ export const updateDetalleVentaDB = async (id_detalle, data) => {
     }
 
 
-    const { ID_Venta, ID_Producto, cantidad, precio_unitario} = data;
+    const { ID_Venta, ID_Producto, cantidad, precio_unitario } = data;
 
     // Construir dinámicamente los campos a actualizar
     const fieldsToUpdate = [];
@@ -112,8 +133,8 @@ export const updateDetalleVentaDB = async (id_detalle, data) => {
 export const deleteDetalleVentaDB = async (id) => {
   try {
     const sentence1 = "SELECT * FROM detalle_venta WHERE id_detalle = ?";
-    const [rows1] = await db.query(sentence1,[id]);
-    if(rows1.length == 0) {
+    const [rows1] = await db.query(sentence1, [id]);
+    if (rows1.length == 0) {
       throw new Error("Detalle de venta no encontrado");
     }
 
@@ -123,7 +144,7 @@ export const deleteDetalleVentaDB = async (id) => {
     if (result.affectedRows === 0) {
       throw new Error("Detalle de venta no encontrado");
     }
-    return ({Detalle: rows1[0], Estado: "Eliminado"});
+    return ({ Detalle: rows1[0], Estado: "Eliminado" });
   } catch (error) {
     throw error;
   }

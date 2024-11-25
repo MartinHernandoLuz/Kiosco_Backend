@@ -25,6 +25,20 @@ export const getVentaByIdDB = async (id) => {
   }
 };
 
+export const getVentasEntreFechasDB = async (startDate, endDate) => {
+  try {
+    const sentence = "SELECT * FROM venta WHERE fecha BETWEEN ? AND ?";
+    const [rows] = await db.query(sentence, [startDate, endDate]);
+    if (rows.length === 0) {
+      throw new Error("No se encontraron ventas en este rango de fechas");
+    }
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
 // Crear una nueva venta
 export const createVentaDB = async (data) => {
   try {

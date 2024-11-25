@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "node --watch index.js",
     "test": "set NODE_OPTIONS=--experimental-vm-modules && jest",
-    "test2":"set NODE_OPTIONS=--experimental-vm-modules && jest src/test/Cliente.test.js",
+    "test2": "set NODE_OPTIONS=--experimental-vm-modules && jest src/test/get.test.js",
     "cobertura": "set NODE_OPTIONS=--experimental-vm-modules && jest --coverage"
   },
   "repository": {
