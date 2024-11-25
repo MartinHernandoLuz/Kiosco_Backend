@@ -42,7 +42,7 @@ export async function getVentasEntreFechas(req, res) {
         const result = await getVentasEntreFechasDB(startDate, endDate);
         res.status(200).json(result);
     } catch (error) {
-        const message = error.message === "Venta no encontrada" ? 404 : 500;
+        const message = error.message === "No se encontraron ventas en este rango de fechas" ? 404 : 500;
         res.status(message).json({ Error: error.message });
     }
 }
