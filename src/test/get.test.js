@@ -1,16 +1,19 @@
 import app from '../../app.js'
 import request from 'supertest'
 
-/*
-{
-  "producto": "Guany",
-  "cantidad": 40,
-  "subtotal": 16000,
-  "fecha": "2024-11-23T14:59:17.000Z",
-  "nombre_cliente": "Ana",
-  "vendedor": "juan.perez@example.com"
-}
-*/
+
+const token = jwt.sign(
+    { email: "juan.perez@example.com", rango: "administrador" },
+    process.env.JWT_SECRET,
+    { expiresIn: "1h" } // Tiempo de expiración del token
+);
+
+const tokenAdmin = jwt.sign(
+    { email: "admin.admin@example.com", rango: "administrador" },
+    process.env.JWT_SECRET,
+    { expiresIn: "1h" } // Tiempo de expiración del token
+);
+
 
 describe('GetAll', () => {
 
@@ -176,7 +179,10 @@ describe('GetAllByID', () => {
     });
 
     test('GET /detalle-ventas/detalle - debería devolver un array de objetos', async () => {
-        const response = await request(app).get('/detalle-ventas/detalle/3').send();
+        const response = await request(app)
+            .get('/detalle-ventas/detalle/3')
+            .set("Authorization", `Bearer ${token}`)
+            .send();
 
         // Verifica que el cuerpo de la respuesta sea un objeto
         expect(response.body).toBeInstanceOf(Object);

@@ -28,7 +28,7 @@ export const getDetalleVentaByIdDB = async (ID_Detalle) => {
 // Obtener full detalle sobre la venta
 export const getFullDetalleByIdDB = async (ID_Detalle) => {
   try {
-    const query = "SELECT producto.nombre as producto,cantidad,subtotal, venta.fecha, cliente.nombre as nombre_cliente,\
+    const query = "SELECT producto.nombre as producto,cantidad,precio_unitario,subtotal, venta.fecha, cliente.nombre as nombre_cliente,\
                     usuario.email as vendedor \
                     FROM detalle_venta \
                     INNER JOIN venta ON detalle_venta.id_venta = venta.id_venta \
