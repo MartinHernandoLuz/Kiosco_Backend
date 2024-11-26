@@ -29,9 +29,9 @@ export const createUserDB = async (data) => {
       message: `Usuario ${email} insertado con éxito`
     };
   } catch (error) {
-    /*if (error.message != "Email ya está en uso") {
+    if (error.message != "Email ya está en uso") {
       error.message = "Error inesperado al crear usuario"
-    }*/
+    }
     throw new Error(error.message)
   }
 };
