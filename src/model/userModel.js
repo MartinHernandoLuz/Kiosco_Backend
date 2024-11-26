@@ -29,7 +29,10 @@ export const createUserDB = async (data) => {
       message: `Usuario ${email} insertado con éxito`
     };
   } catch (error) {
-    throw error;
+    if (error.message != "Email ya está en uso") {
+      error.message = "Error inesperado al crear usuario"
+    }
+    throw new Error(error.message)
   }
 };
 
@@ -68,6 +71,43 @@ export const loginUserDB = async (data) => {
     };
 
   } catch (error) {
+    if (error.message != "Email no encontrado" && error.message != "Contraseña incorrecta") {
+      error.message = "Error inesperado al loguearse"
+    }
+    throw new Error(error.message);
+  }
+};
+
+// Iniciar sesión en la base de datos
+export const actualizarRangoUserDB = async (data) => {
+  try {
+    const { email, rango } = data;
+    if (rango != 'cliente' && rango != 'empleado' && rango != 'administrador') {
+      throw new Error("Rango inválido. Debe ser 'cliente', 'empleado' o 'administrador'");
+    }
+
+    // Buscar al usuario por email
+    const sentence = "SELECT * FROM usuario WHERE email = ?";
+    const [rows] = await db.query(sentence, [email]);
+
+    // Verificar si el email existe
+    if (rows.length === 0) {
+      throw new Error("Email no encontrado");
+    }
+
+    const sentence2 = `UPDATE usuario SET rango = ? WHERE email = ?`
+    const [rows2] = await db.query(sentence2, [rango, email]);
+
+    return {
+      message: "Rango actualizado con éxito",
+      email: email,
+      nuevoRango: rango
+    };
+
+  } catch (error) {
+    if (error.message != "Email no encontrado" && error.message != "Rango inválido. Debe ser 'cliente', 'empleado' o 'administrador'") {
+      error.message = "Error inesperado al actualizar el rango"
+    }
     throw new Error(error.message);
   }
 };

@@ -1,4 +1,4 @@
-import { createUserDB, loginUserDB } from '../model/userModel.js'
+import { actualizarRangoUserDB, createUserDB, loginUserDB } from '../model/userModel.js'
 
 // función para crear el usuario
 export const createUser = async (req, res) => {
@@ -24,6 +24,23 @@ export const loginUser = async (req, res) => {
     } catch (error) {
         const errorStatus = error.message == "Contraseña incorrecta" || "Email no encontrado" ? 400 : 500
         // si hay error, envía el que llega por error o 500 INTERNAL por default
+        res.status(errorStatus).json({ Error: error.message });
+    }
+}
+
+
+
+export const actualizarRangoUser = async (req, res) => {
+    const data = req.body; // saca la data Email y rango
+    try {
+        // envía data a una función que está en userModel.js
+        const result = await actualizarRangoUserDB(data);
+        res.status(201).json(result); // si funciona, envía un 201 CREATED
+    } catch (error) {
+        const errorStatus = error.message == "\
+        Rango inválido. Debe ser 'cliente', 'empleado' o 'administrador'" || "\
+        Email no encontrado" ? 400 : 500
+
         res.status(errorStatus).json({ Error: error.message });
     }
 }
