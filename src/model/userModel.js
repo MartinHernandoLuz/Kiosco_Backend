@@ -18,7 +18,7 @@ export const createUserDB = async (data) => {
     }
 
     // encripta la contraseña
-    const hashedPassword = await bcrypt.hashSync(password, 10);
+    const hashedPassword = await bcrypt.hash(password, 10);
 
 
     // Inserta el usuario en la base de datos con la contraseña encriptada
@@ -29,9 +29,9 @@ export const createUserDB = async (data) => {
       message: `Usuario ${email} insertado con éxito`
     };
   } catch (error) {
-    if (error.message != "Email ya está en uso") {
+    /*if (error.message != "Email ya está en uso") {
       error.message = "Error inesperado al crear usuario"
-    }
+    }*/
     throw new Error(error.message)
   }
 };

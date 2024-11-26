@@ -154,13 +154,13 @@ DROP TABLE IF EXISTS `usuario`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `usuario` (
-  `id_usuario` int NOT NULL,
+  `id_usuario` int NOT NULL AUTO_INCREMENT,
   `email` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
   `rango` enum('cliente','empleado','administrador') DEFAULT 'cliente',
   PRIMARY KEY (`id_usuario`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -169,7 +169,7 @@ CREATE TABLE `usuario` (
 
 LOCK TABLES `usuario` WRITE;
 /*!40000 ALTER TABLE `usuario` DISABLE KEYS */;
-INSERT INTO `usuario` VALUES (1,'juan.perez@example.com','$2a$10$VDdqV3IJI7iXnkrHvGl9PeXHsPFISb92FRZ0S.LtC8iQxVOZ4S6Au','empleado'),(3,'rumba.correo@example.com','$2a$10$/whym896mCw2fl6wn1D3fu1NL/Zv6/NysrtsAi54Ym8k7ihgHYBWG','cliente'),(8,'admin.admin@example.com','$2a$10$vVgHrFyDPBpRFIIjtA4GteHOAt7HKBAWIcHvRSj6MzS7tcvkKbB3u','administrador');
+INSERT INTO `usuario` VALUES (1,'juan.perez@example.com','$2a$10$VDdqV3IJI7iXnkrHvGl9PeXHsPFISb92FRZ0S.LtC8iQxVOZ4S6Au','empleado'),(3,'rumba.correo@example.com','$2a$10$/whym896mCw2fl6wn1D3fu1NL/Zv6/NysrtsAi54Ym8k7ihgHYBWG','cliente'),(8,'admin.admin@example.com','$2a$10$vVgHrFyDPBpRFIIjtA4GteHOAt7HKBAWIcHvRSj6MzS7tcvkKbB3u','administrador'),(9,'pepito.pepito@example.com','$2a$10$FNkRGNsaS3dUu9Mm46aeJe8bOVqQx6Y49kBwJbbtaGxI9X7bfEe/G','cliente');
 /*!40000 ALTER TABLE `usuario` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -213,4 +213,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-11-24 21:22:15
+-- Dump completed on 2024-11-26 18:44:52
