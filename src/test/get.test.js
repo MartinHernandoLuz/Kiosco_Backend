@@ -1,6 +1,6 @@
 import app from '../../app.js'
 import request from 'supertest'
-
+import jwt from 'jsonwebtoken';
 
 const token = jwt.sign(
     { email: "juan.perez@example.com", rango: "administrador" },
