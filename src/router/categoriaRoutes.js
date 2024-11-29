@@ -1,15 +1,15 @@
 import { Router } from "express";
-import { 
-    createCategoria, 
-    deleteCategoriaById, 
-    getAllCategorias, 
-    getCategoriaById, 
-    updateCategoria 
+import {
+    createCategoria,
+    deleteCategoriaById,
+    getAllCategorias,
+    getCategoriaById,
+    updateCategoria
 } from "../controller/categoriaController.js";
 
 import { vieneID } from "../middleware/vieneID.js";
 // Middleware específico para validar campos de categoría
-import { reqControlCategoria } from "../middleware/reqCorreccionCategoria.js"; 
+import { reqControlCategoria, reqControlUpdateCategoria } from "../middleware/reqCorreccionCategoria.js";
 
 // Middleware para comprobar si el usuario es administrador o empleado
 import { esAdmin, tienePermiso } from "../middleware/comprobarRango.js";
@@ -18,10 +18,10 @@ const router = Router(); // Usa la función Router de Express para construir las
 
 // Rutas para categoría
 router.get("/", getAllCategorias); // Obtener todas las categorías
-router.get("/:id",vieneID, getCategoriaById); // Obtener una categoría por ID
+router.get("/:id", vieneID, getCategoriaById); // Obtener una categoría por ID
 router.post("/crear", tienePermiso, reqControlCategoria, createCategoria); // Crear una categoría
-router.put("/actualizar/:id", tienePermiso,vieneID,reqControlCategoria, updateCategoria); // Actualizar una categoría
-router.delete("/eliminar/:id",vieneID, esAdmin, deleteCategoriaById); // Eliminar una categoría por ID
+router.put("/actualizar/:id", tienePermiso, vieneID, reqControlUpdateCategoria, updateCategoria); // Actualizar una categoría
+router.delete("/eliminar/:id", vieneID, esAdmin, deleteCategoriaById); // Eliminar una categoría por ID
 
 // Middleware para manejar rutas no encontradas
 router.use((req, res, next) => {

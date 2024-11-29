@@ -1,11 +1,15 @@
-import { 
-    getAllCategoriasDB, 
-    getCategoriaByIdDB, 
-    createCategoriaDB, 
-    updateCategoriaDB, 
-    deleteCategoriaByIdDB 
+import {
+    getAllCategoriasDB,
+    getCategoriaByIdDB,
+    createCategoriaDB,
+    updateCategoriaDB,
+    deleteCategoriaByIdDB
 } from '../model/categoriaModel.js';
-import { errorsUpdate } from '../others/errorsUpdateCategoria.js'; // Adaptar esta función si es necesaria
+
+import { CustomError } from "../others/customError.js"
+
+
+
 
 // Obtener todas las categorías
 export async function getAllCategorias(req, res) {
@@ -14,8 +18,11 @@ export async function getAllCategorias(req, res) {
         res.status(200).json(result);
     } catch (error) {
         // 503: Service unavailable, servicio caído temporalmente
-        const message = error.message == "Error al obtener las categorías" ? 503 : 500;
-        res.status(message).json(error.message);
+        if (error.message = "Error al obtener las categorías") {
+            res.status(503).json(error.message);
+        } else {
+            res.status(500).json({ Error: "error inesperado" });
+        }
     }
 }
 
@@ -31,8 +38,11 @@ export async function getCategoriaById(req, res) {
         res.status(200).json(result);
     } catch (error) {
         // 404 not found
-        const message = error.message == "Categoría no encontrada" ? 404 : 500;
-        res.status(message).json(error.message);
+        if (error.message = "Categoría no encontrada") {
+            res.status(404).json(error.message);
+        } else {
+            res.status(500).json({ Error: "error inesperado" });
+        }
     }
 }
 
@@ -44,7 +54,7 @@ export async function createCategoria(req, res) {
         res.status(201).json(result);
     } catch (error) {
         // En este caso no hay conflictos de foreign key, pero manejo genérico de errores
-        res.status(500).json(error.message);
+        res.status(500).json({ Error: "error inesperado" });
     }
 }
 
@@ -52,16 +62,18 @@ export async function createCategoria(req, res) {
 export async function updateCategoria(req, res) {
     try {
         // Leer `ID_Categoria` desde los query params ej: actualizar?ID_Categoria=1
-        const  ID_Categoria  = req.params.id; 
+        const ID_Categoria = req.params.id;
         // Leer el resto de los campos desde el body
         const data = req.body;
         // Llamo al Model para manejar la DB
         const result = await updateCategoriaDB(ID_Categoria, data);
         res.status(201).json(result);
     } catch (error) {
-        const errorMsg = error.message;
-        // Manejo de errores específicos
-        errorsUpdate(errorMsg, res);
+        if (error instanceof CustomError) {
+            res.status(error.errorCode).json({ "Error": error.message });
+        } else {
+            res.status(500).json({ "Error": "error inesperado" });
+        }
     }
 }
 
@@ -69,15 +81,14 @@ export async function updateCategoria(req, res) {
 export async function deleteCategoriaById(req, res) {
     try {
         const id = parseInt(req.params.id, 10);
-        if (isNaN(id)) {
-            res.status(400).json({ Error: "El ID debe ser un número válido" });
-            return;
-        }
         const result = await deleteCategoriaByIdDB(id);
         res.status(200).json(result);
     } catch (error) {
         // 404 not found
-        const message = error.message == "La categoría no existe" ? 404 : 500;
-        res.status(message).json(error.message);
+        if (error.message = "La categoría no existe") {
+            res.status(404).json({ Error: error.message });
+        } else {
+            res.status(500).json({ Error: "error inesperado" });
+        }
     }
 }
