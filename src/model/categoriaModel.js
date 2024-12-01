@@ -1,7 +1,5 @@
 import db from "../config/db.js";
 
-import { CustomError } from "../others/customError.js"
-
 
 // Obtener todas las categorías
 export const getAllCategoriasDB = async () => {
@@ -77,17 +75,11 @@ export const updateCategoriaDB = async (id_categoria, data) => {
     return { message: "Categoría actualizada exitosamente" };
 
   } catch (error) {
-    let ErrorCode
-
-    if (error.message = "La categoría con el ID especificado no existe") {
-      ErrorCode = 404
-    }
-    else {
+    if (error.message != "La categoría con el ID especificado no existe") {
       error.message = "Error inesperado, reintente nuevamente"
-      ErrorCode = 503
     }
 
-    throw new CustomError(error.message, ErrorCode);
+    throw new Error(error.message);
   }
 };
 

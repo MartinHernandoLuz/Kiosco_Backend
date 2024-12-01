@@ -6,7 +6,6 @@ import {
     deleteCategoriaByIdDB
 } from '../model/categoriaModel.js';
 
-import { CustomError } from "../others/customError.js"
 
 
 
@@ -39,7 +38,7 @@ export async function getCategoriaById(req, res) {
     } catch (error) {
         // 404 not found
         if (error.message = "Categoría no encontrada") {
-            res.status(404).json(error.message);
+            res.status(404).json({ Error: error.message });
         } else {
             res.status(500).json({ Error: "error inesperado" });
         }
@@ -69,11 +68,8 @@ export async function updateCategoria(req, res) {
         const result = await updateCategoriaDB(ID_Categoria, data);
         res.status(201).json(result);
     } catch (error) {
-        if (error instanceof CustomError) {
-            res.status(error.errorCode).json({ "Error": error.message });
-        } else {
-            res.status(500).json({ "Error": "error inesperado" });
-        }
+        const message = error.message == "La categoría con el ID especificado no existe" ? 404 : 500
+        res.status(message).json({ "Error": error.message });
     }
 }
 
