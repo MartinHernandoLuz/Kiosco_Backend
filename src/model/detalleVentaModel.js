@@ -21,7 +21,10 @@ export const getDetalleVentaByIdDB = async (ID_Detalle) => {
     }
     return rows[0];
   } catch (error) {
-    throw error;
+    if (error.message != "Detalle de venta no encontrado") {
+      error.message = "Ocurrió un error inesperado al obtener el detalle de venta"
+    }
+    throw new Error(error.message)
   }
 };
 
@@ -42,7 +45,10 @@ export const getFullDetalleByIdDB = async (ID_Detalle) => {
     }
     return rows[0];
   } catch (error) {
-    throw error;
+    if (error.message != "Detalle de venta no encontrado") {
+      error.message = "Ocurrió un error inesperado al obtener el detalle de venta"
+    }
+    throw new Error(error.message)
   }
 };
 
@@ -63,19 +69,18 @@ export const createDetalleVentaDB = async (data) => {
     const query = `INSERT INTO detalle_venta (ID_Venta, ID_Producto, cantidad, precio_unitario) 
                    VALUES (?, ?, ?, ?)`;
     await db.query(query, [ID_Venta, ID_Producto, cantidad, precio_unitario]);
-    return "Detalle de venta creado exitosamente";
+    return { Éxito: "Detalle de venta creado exitosamente" };
   } catch (error) {
-    throw error;
+    if (error.message != "Venta no existe" && error.message != "Producto no existe") {
+      error.message = "Ocurrió un error inesperado"
+    }
+    throw new Error(error.message)
   }
 };
 
 // Actualizar un detalle de venta
 export const updateDetalleVentaDB = async (id_detalle, data) => {
   try {
-    if (!id_detalle) {
-      throw new Error("El campo 'ID_Detalle' es obligatorio");
-    }
-
     // Verificar si el registro existe
     const [DetalleExistente] = await db.query(
       "SELECT * FROM detalle_venta WHERE ID_Detalle = ?",
@@ -93,10 +98,18 @@ export const updateDetalleVentaDB = async (id_detalle, data) => {
     const values = [];
 
     if (ID_Venta) {
+      const ventaExiste = "SELECT ID_Venta FROM venta WHERE ID_Venta = ?";
+      const [ventaCheck] = await db.query(ventaExiste, [ID_Venta]);
+      if (ventaCheck.length === 0) throw new Error("Venta no existe");
+
       fieldsToUpdate.push("ID_Venta = ?");
       values.push(ID_Venta);
     }
     if (ID_Producto) {
+      const productoExiste = "SELECT ID_Producto FROM producto WHERE ID_Producto = ?";
+      const [productoCheck] = await db.query(productoExiste, [ID_Producto]);
+      if (productoCheck.length === 0) throw new Error("Producto no existe");
+
       fieldsToUpdate.push("ID_Producto = ?");
       values.push(ID_Producto);
     }
@@ -109,10 +122,6 @@ export const updateDetalleVentaDB = async (id_detalle, data) => {
       values.push(precio_unitario);
     }
 
-    if (fieldsToUpdate.length === 0) {
-      throw new Error("Debe proporcionar al menos un campo para actualizar");
-    }
-
     // Añadir el ID_Detalle al final de los valores
     values.push(id_detalle);
 
@@ -122,9 +131,14 @@ export const updateDetalleVentaDB = async (id_detalle, data) => {
     const query = `UPDATE detalle_venta SET ${fieldsToUpdate.join(", ")} WHERE ID_Detalle = ?`;
     await db.query(query, values);
 
-    return "Detalle de venta actualizado exitosamente";
+    return { Éxito: "Detalle de venta actualizado exitosamente" };
   } catch (error) {
-    throw error;
+    if (error.message != "El detalle de venta con el ID especificado no existe") {
+      error.message = "Ocurrió un error inesperado"
+    } else if (error.message != "Venta no existe" && error.message != "Producto no existe") {
+      error.message = "Ocurrió un error inesperado"
+    }
+    throw new Error(error.message)
   }
 };
 
@@ -146,6 +160,9 @@ export const deleteDetalleVentaDB = async (id) => {
     }
     return ({ Detalle: rows1[0], Estado: "Eliminado" });
   } catch (error) {
-    throw error;
+    if (error.message != "Detalle de venta no encontrado") {
+      error.message = "Ocurrió un error inesperado"
+    }
+    throw new Error(error.message)
   }
 };
