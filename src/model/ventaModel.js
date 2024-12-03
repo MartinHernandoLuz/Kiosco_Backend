@@ -55,7 +55,7 @@ export const createVentaDB = async (data) => {
     const sentence = "INSERT INTO venta (ID_Cliente, total,id_vendedor) VALUES (?, ?, ?)";
     await db.query(sentence, [ID_Cliente, total, id_vendedor]);
 
-    return "Venta creada exitosamente";
+    return { Message: "Venta creada exitosamente" };
   } catch (error) {
     throw error;
   }
@@ -126,7 +126,7 @@ export const updateVentaDB = async (id_venta, data) => {
     const query = `UPDATE venta SET ${fieldsToUpdate.join(', ')} WHERE id_venta = ?`;
     await db.query(query, values);
 
-    return "Venta actualizada exitosamente";
+    return { Message: "Venta actualizada exitosamente" };
   } catch (error) {
     throw error;
   }

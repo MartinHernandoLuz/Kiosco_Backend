@@ -6,7 +6,6 @@ import {
   deleteDetalleVentaDB,
   getFullDetalleByIdDB,
 } from "../model/detalleVentaModel.js";
-import { errorsUpdate } from "../others/errorsUpdateDetalleVenta.js";
 
 export async function getAllDetallesVenta(req, res) {
   try {

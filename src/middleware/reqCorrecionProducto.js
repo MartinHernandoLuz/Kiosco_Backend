@@ -1,4 +1,4 @@
-import { body, validationResult } from "express-validator";
+import { check, body, validationResult } from "express-validator";
 
 // Middleware de validación
 export const reqControlProducto = [
@@ -56,6 +56,14 @@ export const reqControlUpdateProducto = [
   body('ID_Categoria')
     .optional()
     .isInt({ min: 1 }).withMessage('El ID de la categoría debe ser un entero positivo'),
+
+  check().custom((_, { req }) => {
+    const { nombre, precio, stock, ID_Categoria } = req.body
+    if (!nombre && !precio && !stock && !ID_Categoria) {
+      throw new Error("Debe proporcionar al menos uno de los siguientes campos en el cuerpo de la solicitud: nombre, precio, stock, ID_Categoria");
+    }
+    return true
+  }),
 
   // Middleware para manejar los errores de validación
   (req, res, next) => {

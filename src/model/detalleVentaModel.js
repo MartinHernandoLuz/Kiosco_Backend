@@ -69,7 +69,7 @@ export const createDetalleVentaDB = async (data) => {
     const query = `INSERT INTO detalle_venta (ID_Venta, ID_Producto, cantidad, precio_unitario) 
                    VALUES (?, ?, ?, ?)`;
     await db.query(query, [ID_Venta, ID_Producto, cantidad, precio_unitario]);
-    return { Éxito: "Detalle de venta creado exitosamente" };
+    return { Message: "Detalle de venta creado exitosamente" };
   } catch (error) {
     if (error.message != "Venta no existe" && error.message != "Producto no existe") {
       error.message = "Ocurrió un error inesperado"
@@ -131,7 +131,7 @@ export const updateDetalleVentaDB = async (id_detalle, data) => {
     const query = `UPDATE detalle_venta SET ${fieldsToUpdate.join(", ")} WHERE ID_Detalle = ?`;
     await db.query(query, values);
 
-    return { Éxito: "Detalle de venta actualizado exitosamente" };
+    return { Message: "Detalle de venta actualizado exitosamente" };
   } catch (error) {
     if (error.message != "El detalle de venta con el ID especificado no existe") {
       error.message = "Ocurrió un error inesperado"

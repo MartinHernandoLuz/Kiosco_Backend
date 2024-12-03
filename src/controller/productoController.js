@@ -9,8 +9,7 @@ export async function getAllProductos(req, res) {
         res.status(200).json(result);
     } catch (error) {
         // 503: service unavailable, servicio caído temporalmente
-        const message = error.message == "Error al obtener los productos" ? 503 : 500
-        res.status(message).json(error.message);
+        res.status(503).json(error.message);
     }
 }
 
@@ -38,7 +37,7 @@ export async function createProducto(req, res) {
     try {
         const data = req.body
         const result = await createProductoDB(data);
-        res.status(201).json({ message: result });
+        res.status(201).json(result);
     } catch (error) {
         // 409: hay conflicto con la foreign key
         const message = error.message == "La categoría no existe" ? 409 : 500
@@ -55,12 +54,16 @@ export async function updateProducto(req, res) {
         const data = req.body;
         // llamo al Model para manejar la DB apartir de aquí 
         const result = await updateProductoDB(id_producto, data);
-        res.status(201).json({ message: result });
+        res.status(201).json(result);
     } catch (error) {
-        const errorMsg = error.message;
-        // hay demaciados errores posibles, así que lo envié a la carpeta others
-        // envio res para que pueda disparar la función allí
-        errorsUpdate(errorMsg, res);
+        if (error.message != "Categoría no existe") {
+            res.status(409).json(error.message);
+        } else if (error.message != "El producto con el ID especificado no existe") {
+            res.status(400).json(error.message);
+        } else {
+            res.status(500).json(error.message);
+        }
+
     }
 }
 
@@ -78,7 +81,10 @@ export async function deleteProductoById(req, res) {
         res.status(200).json(result);
     } catch (error) {
         // 404 not found
-        const message = error.message == "Producto no encontrado" ? 404 : 500
-        res.status(message).json(error.message);
+        if (error.message != "El Producto no existe" && error.message != "Producto no encontrado") {
+            res.status(404).json(error.message);
+        } else {
+            res.status(500).json(error.message);
+        }
     }
 }

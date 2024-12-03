@@ -21,54 +21,51 @@ export const getProductoByIdDB = async (id) => {
   try {
     // Obtener productos por id
     const sentence = "SELECT * FROM producto WHERE id_producto = ?";
-    const [rows] = await db.query(sentence,[id]);
-    if(rows.length == 0) {
+    const [rows] = await db.query(sentence, [id]);
+    if (rows.length == 0) {
       throw new Error("Producto no encontrado");
     }
     return rows;
   } catch (error) {
-    throw error;
+    if (error.message != "Producto no encontrado") {
+      error.message = "Ocurrió un error inesperado"
+    }
+    throw new Error(error.message)
   }
 }
 
 // crear producto
 export const createProductoDB = async (data) => {
   try {
-    const {nombre,precio,stock,ID_Categoria} = data;
+    const { nombre, precio, stock, ID_Categoria } = data;
 
     // comprobar si la clave foránea, ID_Categoria está en la base de datos
     const comprobar = "SELECT ID_Categoria FROM categoria WHERE ID_Categoria = ?"
-    const [comprobacion] = await db.query(comprobar,[ID_Categoria])
-    if(comprobacion.length == 0){
+    const [comprobacion] = await db.query(comprobar, [ID_Categoria])
+    if (comprobacion.length == 0) {
       throw new Error("La categoría no existe");
     }
 
     // Insertar un nuevo producto
     const sentence = "INSERT INTO producto (nombre,precio,stock,ID_Categoria) VALUES (?,?,?,?)";
-    await db.query(sentence, [nombre,precio,stock,ID_Categoria]);
-    return "Producto creado exitosamente";
+    await db.query(sentence, [nombre, precio, stock, ID_Categoria]);
+
+    return { Message: "Producto creado exitosamente" };
+
   } catch (error) {
-    throw error;
+    if (error.message != "La categoría no existe") {
+      error.message = "Ocurrió un error inesperado"
+    }
+    throw new Error(error.message)
   }
 }
 
 // actualizar producto
-export const updateProductoDB = async (id_producto,data) => {
+export const updateProductoDB = async (id_producto, data) => {
   try {
-    // antes de veo si viene lo mínimo necesario
-    const {nombre, precio, stock, ID_Categoria} = data;
+    const { nombre, precio, stock, ID_Categoria } = data;
 
-    // Paso 1: Verificar que `id_producto` esté presente en `req.query`
-    if (!id_producto) {
-      throw new Error("El campo 'id_producto' es obligatorio en los parámetros de consulta");
-    }
-
-    // Paso 2: Verificar que al menos uno de los campos adicionales esté presente en `req.body`
-    if (!nombre && !precio && !stock && !ID_Categoria) {
-      throw new Error("Debe proporcionar al menos uno de los siguientes campos en el cuerpo de la solicitud: nombre, precio, stock, ID_Categoria");
-    }
-
-    // Paso 3: Comprobar si el `id_producto` existe en la base de datos
+    // Comprobar si el `id_producto` existe en la base de datos
     const [productoExistente] = await db.query("SELECT * FROM producto WHERE id_producto = ?", [id_producto]);
     if (productoExistente.length === 0) {
       throw new Error("El producto con el ID especificado no existe");
@@ -93,14 +90,12 @@ export const updateProductoDB = async (id_producto,data) => {
       values.push(stock);
     }
     if (ID_Categoria) {
+      const categoriaExiste = "SELECT ID_Categoria FROM categoria WHERE ID_Categoria = ?";
+      const [ventaCheck] = await db.query(categoriaExiste, [ID_Categoria]);
+      if (ventaCheck.length === 0) throw new Error("Categoría no existe");
+
       fieldsToUpdate.push("ID_Categoria = ?");
       values.push(ID_Categoria);
-    }
-
-    // Si no hay campos a actualizar, retornar un error (esto es para seguridad)
-    if (fieldsToUpdate.length === 0) {
-      throw new Error("No se ha proporcionado ningún dato para actualizar");
-      
     }
 
     // Agregar `id_producto` al final de los valores para el WHERE
@@ -110,9 +105,12 @@ export const updateProductoDB = async (id_producto,data) => {
     const query = `UPDATE producto SET ${fieldsToUpdate.join(', ')} WHERE id_producto = ?`;
     await db.query(query, values);
 
-    return "Producto actualizado exitosamente";
-  } catch(error){
-    throw error;
+    return { Message: "Producto actualizado exitosamente" };
+  } catch (error) {
+    if (error.message != "Categoría no existe" && error.message != "El producto con el ID especificado no existe") {
+      error.message = "Ocurrió un error inesperado"
+    }
+    throw new Error(error.message)
   }
 }
 
@@ -122,20 +120,23 @@ export const deleteProductoByIdDB = async (id) => {
   try {
     // verificar existencia
     const sentence1 = "SELECT * FROM producto WHERE id_producto = ?";
-    const [rows1] = await db.query(sentence1,[id]);
-    if(rows1.length == 0) {
+    const [rows1] = await db.query(sentence1, [id]);
+    if (rows1.length == 0) {
       throw new Error("El Producto no existe");
     }
 
     // eliminar
     const sentence2 = "DELETE FROM producto WHERE id_producto = ?";
-    const [rows2] = await db.query(sentence2,[id]);
-    if(rows2.affectedRows < 1) {
+    const [rows2] = await db.query(sentence2, [id]);
+    if (rows2.affectedRows < 1) {
       throw new Error("Producto no encontrado");
     }
 
-    return({Producto: rows1[0], Estado: "Eliminado"});
+    return ({ Producto: rows1[0], Estado: "Eliminado" });
   } catch (error) {
-    throw error;
+    if (error.message != "El Producto no existe" && error.message != "Producto no encontrado") {
+      error.message = "Ocurrió un error inesperado"
+    }
+    throw new Error(error.message)
   }
 }
