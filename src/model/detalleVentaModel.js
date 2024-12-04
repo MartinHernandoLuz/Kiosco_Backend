@@ -133,10 +133,10 @@ export const updateDetalleVentaDB = async (id_detalle, data) => {
 
     return { Message: "Detalle de venta actualizado exitosamente" };
   } catch (error) {
-    if (error.message != "El detalle de venta con el ID especificado no existe") {
-      error.message = "Ocurrió un error inesperado"
-    } else if (error.message != "Venta no existe" && error.message != "Producto no existe") {
-      error.message = "Ocurrió un error inesperado"
+    if (error.message !== "El detalle de venta con el ID especificado no existe" &&
+      error.message !== "Venta no existe" &&
+      error.message !== "Producto no existe") {
+      error.message = "Ocurrió un error inesperado";
     }
     throw new Error(error.message)
   }

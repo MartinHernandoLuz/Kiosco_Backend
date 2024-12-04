@@ -1,5 +1,4 @@
 import db from "../config/db.js";
-import { CustomError } from "../others/customError.js"
 
 // db se encuentra en la carpeta config, se usa para enviar Querys a la Base de Datos
 

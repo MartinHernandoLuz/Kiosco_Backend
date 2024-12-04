@@ -76,7 +76,7 @@ export const updateCategoriaDB = async (id_categoria, data) => {
 
   } catch (error) {
     if (error.message != "La categoría con el ID especificado no existe") {
-      error.message = "Error inesperado, reintente nuevamente"
+      error.message = "Error inesperado, intente nuevamente"
     }
 
     throw new Error(error.message);
