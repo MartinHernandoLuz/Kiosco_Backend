@@ -1,4 +1,4 @@
-import { body, validationResult } from "express-validator";
+import { body, check, validationResult } from "express-validator";
 
 // Middleware de validación para creación de venta
 export const reqControlVenta = [
@@ -46,6 +46,13 @@ export const reqControlUpdateVenta = [
     body("id_vendedor")
         .optional()
         .isInt({ gt: 0 }).withMessage("El id_vendedor debe ser un número entero positivo"),
+    check().custom((_, { req }) => {
+        const { ID_Cliente, total, fecha, id_vendedor } = req.body
+        if (!ID_Cliente && !total && !fecha && !id_vendedor) {
+            throw new Error("Debe proporcionar al menos uno de los siguientes campos: ID_Cliente, total, fecha, id_vendedor");
+        }
+        return true
+    }),
 
     // Manejo de errores de validación
     (req, res, next) => {

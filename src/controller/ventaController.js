@@ -14,18 +14,14 @@ export async function getAllVentas(req, res) {
         const result = await getAllVentasDB();
         res.status(200).json(result);
     } catch (error) {
-        res.status(503).json({ Error: "Error al obtener las ventas" });
+        res.status(503).json({ Error: error.message });
     }
 }
 
 // Obtener una venta por ID
 export async function getVentaById(req, res) {
     try {
-        const id = parseInt(req.params.id, 10);
-        if (isNaN(id)) {
-            res.status(400).json({ Error: "El ID debe ser un número válido" });
-            return;
-        }
+        const id = req.params.id;
         const result = await getVentaByIdDB(id);
         res.status(200).json(result);
     } catch (error) {
@@ -72,8 +68,11 @@ export async function updateVenta(req, res) {
         const result = await updateVentaDB(id_venta, data);
         res.status(201).json(result);
     } catch (error) {
-        const errorMsg = error.message;
-        errorsUpdateVenta(errorMsg, res);
+        if (error.message != "El cliente especificado no existe" && error.message != "La venta con el ID especificado no existe") {
+            res.status(400).json({ Error: error.message });
+        } else {
+            res.status(500).json({ Error: error.message });
+        }
     }
 }
 

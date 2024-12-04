@@ -21,6 +21,9 @@ export const getVentaByIdDB = async (id) => {
     }
     return rows;
   } catch (error) {
+    if (error.message != "Venta no encontrada") {
+      error.message = "Ocurrió un error inesperado"
+    }
     throw error;
   }
 };
@@ -34,6 +37,9 @@ export const getVentasEntreFechasDB = async (startDate, endDate) => {
     }
     return rows;
   } catch (error) {
+    if (error.message != "No se encontraron ventas en este rango de fechas") {
+      error.message = "Ocurrió un error inesperado"
+    }
     throw error;
   }
 };
@@ -57,6 +63,9 @@ export const createVentaDB = async (data) => {
 
     return { Message: "Venta creada exitosamente" };
   } catch (error) {
+    if (error.message != "El cliente especificado no existe") {
+      error.message = "Ocurrió un error inesperado"
+    }
     throw error;
   }
 };
@@ -66,16 +75,6 @@ export const updateVentaDB = async (id_venta, data) => {
   try {
     const { ID_Cliente, total, fecha, id_vendedor } = data;
 
-    // Verificar que `id_venta` esté presente
-    if (!id_venta) {
-      throw new Error("El campo 'id_venta' es obligatorio");
-    }
-
-    // Verificar que al menos uno de los campos esté presente.
-    if (!ID_Cliente && !total && !fecha && !id_vendedor) {
-      throw new Error("Debe proporcionar al menos uno de los siguientes campos: ID_Cliente, total, fecha, id_vendedor");
-    }
-
     // Verificar que la venta exista
     const comprobarVenta = "SELECT * FROM venta WHERE id_venta = ?";
     const [ventaExistente] = await db.query(comprobarVenta, [id_venta]);
@@ -83,20 +82,17 @@ export const updateVentaDB = async (id_venta, data) => {
       throw new Error("La venta con el ID especificado no existe");
     }
 
-    // Verificar que el cliente especificado exista si se proporciona
+    // Construir la consulta dinámica
+    const fieldsToUpdate = [];
+    const values = [];
+
     if (ID_Cliente) {
       const comprobarCliente = "SELECT * FROM cliente WHERE id_Cliente = ?";
       const [clienteExistente] = await db.query(comprobarCliente, [ID_Cliente]);
       if (clienteExistente.length === 0) {
         throw new Error("El cliente especificado no existe");
       }
-    }
 
-    // Construir la consulta dinámica
-    const fieldsToUpdate = [];
-    const values = [];
-
-    if (ID_Cliente) {
       fieldsToUpdate.push("ID_Cliente = ?");
       values.push(ID_Cliente);
     }
@@ -114,11 +110,6 @@ export const updateVentaDB = async (id_venta, data) => {
     }
 
 
-    // Si no hay campos a actualizar, retornar un error
-    if (fieldsToUpdate.length === 0) {
-      throw new Error("No se ha proporcionado ningún dato para actualizar");
-    }
-
     // Agregar `id_venta` al final de los valores para el WHERE
     values.push(id_venta);
 
@@ -128,6 +119,9 @@ export const updateVentaDB = async (id_venta, data) => {
 
     return { Message: "Venta actualizada exitosamente" };
   } catch (error) {
+    if (error.message != "El cliente especificado no existe" && error.message != "La venta con el ID especificado no existe") {
+      error.message = "Ocurrió un error inesperado"
+    }
     throw error;
   }
 };
@@ -151,6 +145,9 @@ export const deleteVentaByIdDB = async (id) => {
 
     return { Venta: ventaExistente[0], Estado: "Eliminada" };
   } catch (error) {
+    if (error.message != "La venta no existe" && error.message != "Error al eliminar la venta") {
+      error.message = "Ocurrió un error inesperado"
+    }
     throw error;
   }
 };
