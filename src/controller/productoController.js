@@ -1,5 +1,5 @@
 import { getAllProductosDB, getProductoByIdDB, createProductoDB, updateProductoDB, deleteProductoByIdDB } from '../model/productoModel.js'
-import { errorsUpdate } from '../others/errorsUpdateProducto.js';
+
 
 // obtener todos los productos
 export async function getAllProductos(req, res) {

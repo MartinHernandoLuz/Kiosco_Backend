@@ -20,22 +20,22 @@ app.use(express.json()); // avisarle a Express que voy a enviar JSON
 
 /************** Routes *************/
 // los ruteadores están en carpeta router
-app.use("/user",userRoutes) 
+app.use("/user", userRoutes)
 
-app.use("/productos",productoRoutes) 
+app.use("/productos", productoRoutes)
 
-app.use("/categorias",categoriaRoutes) 
+app.use("/categorias", categoriaRoutes)
 
-app.use("/clientes",clienteRoutes) 
+app.use("/clientes", clienteRoutes)
 
-app.use("/ventas",ventasRoutes) 
+app.use("/ventas", ventasRoutes)
 
-app.use("/detalle-ventas",detalleVentasRoutes) 
+app.use("/detalle-ventas", detalleVentasRoutes)
 
 // ruta default
-app.use("/",(req,res)=>{
+/*app.use("/",(req,res)=>{
     res.json({mensaje: "acá no hay nada"})
-})
+})*/
 
 
 

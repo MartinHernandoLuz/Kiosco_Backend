@@ -4,7 +4,6 @@ import {
     createClienteDB,
     updateClienteDB, deleteClienteByIdDB
 } from '../model/clienteModel.js'
-import { errorsUpdate } from '../others/errorsUpdateCliente.js';
 
 
 

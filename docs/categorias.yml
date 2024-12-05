@@ -1,0 +1,123 @@
+paths:
+  /categorias:
+    get:
+      summary: Obtener todas las categorías
+      tags:
+        - Categorías
+      responses:
+        200:
+          description: Lista de categorías obtenida con éxito.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      example: 1
+                    nombre:
+                      type: string
+                      example: "Frutas"
+
+  /categorias/{id}:
+    get:
+      summary: Obtener una categoría por ID
+      tags:
+        - Categorías
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID de la categoría.
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Detalle de la categoría obtenida.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  nombre:
+                    type: string
+                    example: "Frutas"
+        404:
+          description: Categoría no encontrada.
+
+  /categorias/crear:
+    post:
+      summary: Crear una nueva categoría
+      tags:
+        - Categorías
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                nombre:
+                  type: string
+                  example: "Verduras"
+      responses:
+        201:
+          description: Categoría creada con éxito.
+        400:
+          description: Error en los datos enviados.
+
+  /categorias/actualizar/{id}:
+    put:
+      summary: Actualizar una categoría existente
+      tags:
+        - Categorías
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID de la categoría a actualizar.
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                nombre:
+                  type: string
+                  example: "Carnes"
+      responses:
+        200:
+          description: Categoría actualizada con éxito.
+        400:
+          description: Error en los datos enviados.
+        404:
+          description: Categoría no encontrada.
+
+  /categorias/eliminar/{id}:
+    delete:
+      summary: Eliminar una categoría por ID
+      tags:
+        - Categorías
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID de la categoría a eliminar.
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Categoría eliminada con éxito.
+        404:
+          description: Categoría no encontrada.
+        403:
+          description: No tienes permisos para realizar esta acción.
+

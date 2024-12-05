@@ -6,7 +6,6 @@ import {
     deleteVentaByIdDB,
     getVentasEntreFechasDB
 } from '../model/ventaModel.js';
-import { errorsUpdateVenta } from '../others/errorsUpdateVenta.js';
 
 // Obtener todas las ventas
 export async function getAllVentas(req, res) {
