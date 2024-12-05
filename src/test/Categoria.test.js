@@ -127,8 +127,9 @@ describe("PUT /actualizar/:id - Ruta para actualizar categoria", () => {
     expect(response.body.errors).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          msg: "El nombre es obligatorio"
-        })
+          "location": "body", "msg": "Debe proporcionar el campo nombre", "path": "nombre", "type": "field"
+        }),
+        expect.objectContaining({ "location": "body", "msg": "El nombre debe ser una cadena de texto", "path": "nombre", "type": "field" })
       ])
     );
   });

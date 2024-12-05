@@ -1,4 +1,6 @@
 import express from "express";
+import { swaggerDOC } from './docs/swagger.js'
+
 import 'dotenv/config'
 import { seguridadInicial } from "./src/middleware/seguridadInicial.js";
 import userRoutes from "./src/router/userRoutes.js";
@@ -32,10 +34,13 @@ app.use("/ventas", ventasRoutes)
 
 app.use("/detalle-ventas", detalleVentasRoutes)
 
+const PORT = process.env.PORT || 3000;
+swaggerDOC(app, PORT);
+
 // ruta default
-/*app.use("/",(req,res)=>{
-    res.json({mensaje: "acá no hay nada"})
-})*/
+app.use("/", (req, res) => {
+    res.json({ mensaje: "acá no hay nada" })
+})
 
 
 

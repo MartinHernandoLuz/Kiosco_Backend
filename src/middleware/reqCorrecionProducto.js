@@ -68,9 +68,17 @@ export const reqControlUpdateProducto = [
   // Middleware para manejar los errores de validación
   (req, res, next) => {
     const errors = validationResult(req);
+
     if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
+      // Filtra los errores que provienen de 'body'
+      const bodyErrors = errors.array().filter(error => error.location === 'body');
+
+      // Si hay errores, devuelves solo los errores del cuerpo en formato simplificado
+      if (bodyErrors.length > 0) {
+        return res.status(400).json({ errors: bodyErrors });
+      }
     }
+
     next();
   },
 ];

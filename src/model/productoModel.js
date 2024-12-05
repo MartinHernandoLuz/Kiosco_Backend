@@ -50,7 +50,7 @@ export const createProductoDB = async (data) => {
     const sentence = "INSERT INTO producto (nombre,precio,stock,ID_Categoria) VALUES (?,?,?,?)";
     await db.query(sentence, [nombre, precio, stock, ID_Categoria]);
 
-    return { Message: "Producto creado exitosamente" };
+    return { message: "Producto creado exitosamente" };
 
   } catch (error) {
     if (error.message != "La categoría no existe") {
@@ -105,7 +105,7 @@ export const updateProductoDB = async (id_producto, data) => {
     const query = `UPDATE producto SET ${fieldsToUpdate.join(', ')} WHERE id_producto = ?`;
     await db.query(query, values);
 
-    return { Message: "Producto actualizado exitosamente" };
+    return { message: "Producto actualizado exitosamente" };
   } catch (error) {
     if (error.message != "Categoría no existe" && error.message != "El producto con el ID especificado no existe") {
       error.message = "Ocurrió un error inesperado"
