@@ -17,7 +17,7 @@ const tokenAdmin = jwt.sign(
 
 
 
-describe("POST /crear - Ruta para crear producto", () => {
+describe("POST /crear - Ruta para crear venta", () => {
 
   beforeEach(async () => {
     // Iniciar una conexión para la transacción
@@ -32,48 +32,45 @@ describe("POST /crear - Ruta para crear producto", () => {
 
   //##########################################
 
-  it("Debería crear un Producto correctamente", async () => {
-    const productoData = {
-      "nombre": "HP",
-      "precio": "1000000",
-      "stock": "30",
-      "ID_Categoria": "5"
+  it("Debería crear un Venta correctamente", async () => {
+    const ventaData = {
+      "ID_Cliente": "3",
+      "total": "40",
+      "id_vendedor": "1"
     };
 
     const response = await request(app)
-      .post("/productos/crear")
+      .post("/ventas/crear")
       .set("Authorization", `Bearer ${token}`) // Aquí va el token
-      .send(productoData);
+      .send(ventaData);
 
     // Verificar la respuesta
     expect(response.body).toEqual(
       expect.objectContaining({
-        message: "Producto creado exitosamente",
+        Message: "Venta creada exitosamente",
       }));
     expect(response.statusCode).toBe(201);
   });
 
   it("Debería devolver un error si no se envía el body", async () => {
     const response = await request(app)
-      .post("/productos/crear")
+      .post("/ventas/crear")
       .set("Authorization", `Bearer ${token}`) // Aquí va el token
       .send({}); // Enviar un cuerpo vacío
 
     expect(response.statusCode).toBe(400); // Error de validación
     expect(response.body.errors).toEqual(
       expect.arrayContaining([
-        expect.objectContaining({
-          msg: "El nombre es obligatorio"
-        })
+        expect.any(Object) // Esto valida que haya al menos un objeto en el array.
       ])
     );
   });
 
   it("Debería devolver un error si el token es inválido", async () => {
     const response = await request(app)
-      .post("/productos/crear")
+      .post("/ventas/crear")
       .set("Authorization", `Bearer invalidtoken`) // Token inválido
-      .send({ nombre: "Producto Inválida" });
+      .send({ nombre: "Venta Inválida" });
 
     expect(response.statusCode).toBe(401); // Acceso prohibido
     expect(response.body).toMatchObject({ error: 'Token no válido o expirado' });
@@ -85,7 +82,7 @@ describe("POST /crear - Ruta para crear producto", () => {
 
 
 
-describe("PUT /actualizar/:id - Ruta para actualizar producto", () => {
+describe("PUT /actualizar/:id - Ruta para actualizar venta", () => {
   beforeEach(async () => {
     // Iniciar una conexión para la transacción
     await db.query("BEGIN")
@@ -99,25 +96,25 @@ describe("PUT /actualizar/:id - Ruta para actualizar producto", () => {
 
 
 
-  it("Debería actualizar un Producto correctamente", async () => {
-    const productoData = { "nombre": "voley" };
+  it("Debería actualizar un Venta correctamente", async () => {
+    const ventaData = { "total": "40" };
 
     const response = await request(app)
-      .put("/productos/actualizar/1")
+      .put("/ventas/actualizar/3")
       .set("Authorization", `Bearer ${token}`) // Aquí va el token
-      .send(productoData);
+      .send(ventaData);
 
     // Verificar la respuesta
     expect(response.body).toEqual(
       expect.objectContaining({
-        message: "Producto actualizado exitosamente",
+        Message: "Venta actualizada exitosamente",
       }));
     expect(response.statusCode).toBe(201);
   });
 
   it("Debería devolver un error si no se envía el ID", async () => {
     const response = await request(app)
-      .put("/productos/actualizar/f")
+      .put("/ventas/actualizar/f")
       .set("Authorization", `Bearer ${token}`) // Aquí va el token
       .send({}); // Enviar un cuerpo vacío
 
@@ -131,7 +128,7 @@ describe("PUT /actualizar/:id - Ruta para actualizar producto", () => {
 
   it("Debería devolver un error si no se envía nada", async () => {
     const response = await request(app)
-      .put("/productos/actualizar/1")
+      .put("/ventas/actualizar/1")
       .set("Authorization", `Bearer ${token}`) // Aquí va el token
       .send({}); // Enviar un cuerpo vacío
 
@@ -140,13 +137,7 @@ describe("PUT /actualizar/:id - Ruta para actualizar producto", () => {
 
     expect(response.body.errors).toEqual(
       expect.arrayContaining([
-        expect.objectContaining({
-          "type": "field",
-          "value": {},
-          "msg": "Debe proporcionar al menos uno de los siguientes campos en el cuerpo de la solicitud: nombre, precio, stock, ID_Categoria",
-          "path": "",
-          "location": "body"
-        })
+        expect.any(Object)
       ])
     );
 
@@ -154,9 +145,9 @@ describe("PUT /actualizar/:id - Ruta para actualizar producto", () => {
 
   it("Debería devolver un error si el token es inválido", async () => {
     const response = await request(app)
-      .put("/productos/actualizar/1")
+      .put("/ventas/actualizar/1")
       .set("Authorization", `Bearer invalidtoken`) // Token inválido
-      .send({ nombre: "Producto Inválida" });
+      .send({ nombre: "Venta Inválida" });
 
     expect(response.statusCode).toBe(401); // Acceso prohibido
     expect(response.body).toMatchObject({ error: 'Token no válido o expirado' });
@@ -168,7 +159,7 @@ describe("PUT /actualizar/:id - Ruta para actualizar producto", () => {
 
 
 
-describe("DELETE /eliminar/:id - Ruta para eliminar un Producto", () => {
+describe("DELETE /eliminar/:id - Ruta para eliminar un Venta", () => {
   beforeEach(async () => {
     // Iniciar una conexión para la transacción
     await db.query("BEGIN")
@@ -179,25 +170,40 @@ describe("DELETE /eliminar/:id - Ruta para eliminar un Producto", () => {
     await db.query("ROLLBACK")
   })
 
-  it("Debería eliminar una Producto correctamente", async () => {
+  it("Debería eliminar una Venta correctamente", async () => {
 
     const response = await request(app)
-      .delete("/productos/eliminar/1")
+      .delete("/ventas/eliminar/3")
       .set("Authorization", `Bearer ${tokenAdmin}`) // Aquí va el token
 
     // Verificar la respuesta
     expect(response.body).toEqual(
       expect.objectContaining({
-        Producto: expect.any(Object), // Confirmar que 'Producto' sea un objeto
-        Estado: "Eliminado",          // Confirmar que el estado sea "Eliminada"
+        Venta: expect.any(Object), // Confirmar que 'Venta' sea un objeto
+        Estado: "Eliminada",          // Confirmar que el estado sea "Eliminada"
       })
     );
     expect(response.statusCode).toBe(200);
   });
 
+  it("Debería decir que la venta no existe", async () => {
+
+    const response = await request(app)
+      .delete("/ventas/eliminar/1")
+      .set("Authorization", `Bearer ${tokenAdmin}`) // Aquí va el token
+
+    // Verificar la respuesta
+    expect(response.body).toEqual(
+      expect.objectContaining({
+        "Error": "La venta no existe"
+      })
+    );
+    expect(response.statusCode).toBe(404);
+  });
+
   it("Debería fallar el acceso", async () => {
     const response = await request(app)
-      .delete("/productos/eliminar/1")
+      .delete("/ventas/eliminar/1")
       .set("Authorization", `Bearer ${token}`); // Aquí va el token
 
     // Verificar la respuesta
@@ -214,7 +220,7 @@ describe("DELETE /eliminar/:id - Ruta para eliminar un Producto", () => {
 
   it("Debería devolver un error si no se envía el ID", async () => {
     const response = await request(app)
-      .delete("/productos/eliminar/f")
+      .delete("/ventas/eliminar/f")
       .set("Authorization", `Bearer ${token}`) // Aquí va el token
 
     expect(response.statusCode).toBe(400); // Error de validación
@@ -229,7 +235,7 @@ describe("DELETE /eliminar/:id - Ruta para eliminar un Producto", () => {
 
   it("Debería devolver un error si el token es inválido", async () => {
     const response = await request(app)
-      .delete("/productos/eliminar/1")
+      .delete("/ventas/eliminar/1")
       .set("Authorization", `Bearer invalidtoken`) // Token inválido
 
     expect(response.statusCode).toBe(401); // Acceso prohibido
