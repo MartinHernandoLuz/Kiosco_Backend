@@ -14,7 +14,7 @@ paths:
                 items:
                   type: object
                   properties:
-                    id:
+                    id_categoria:
                       type: integer
                       example: 1
                     nombre:
@@ -45,7 +45,7 @@ paths:
                     type: integer
                     example: 1
                   nombre:
-                    type: string
+                    type: integer
                     example: "Frutas"
         404:
           description: Categoría no encontrada.
@@ -121,3 +121,840 @@ paths:
         403:
           description: No tienes permisos para realizar esta acción.
 
+
+
+
+  /clientes:
+    get:
+      summary: Obtener todos los clientes
+      tags:
+        - Clientes
+      responses:
+        200:
+          description: Lista de clientes obtenida con éxito.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    DNI:
+                      type: string
+                      example: "12345678"
+                    nombre:
+                      type: string
+                      example: "Juan"
+                    apellido:
+                      type: string
+                      example: "Pérez"
+                    telefono:
+                      type: string
+                      example: "1234567890"
+                    email:
+                      type: string
+                      example: "juan.perez@example.com"
+
+  /clientes/{id}:
+    get:
+      summary: Obtener un cliente por ID
+      tags:
+        - Clientes
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del cliente.
+          schema:
+            type: string
+      responses:
+        200:
+          description: Detalle del cliente obtenido.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  DNI:
+                    type: string
+                    example: "12345678"
+                  nombre:
+                    type: string
+                    example: "Juan"
+                  apellido:
+                    type: string
+                    example: "Pérez"
+                  telefono:
+                    type: string
+                    example: "1234567890"
+                  email:
+                    type: string
+                    example: "juan.perez@example.com"
+        404:
+          description: Cliente no encontrado.
+
+  /clientes/crear:
+    post:
+      summary: Crear un nuevo cliente
+      tags:
+        - Clientes
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                DNI:
+                  type: string
+                  example: "12345678"
+                nombre:
+                  type: string
+                  example: "Carlos"
+                apellido:
+                  type: string
+                  example: "García"
+                telefono:
+                  type: string
+                  example: "9876543210"
+                email:
+                  type: string
+                  example: "carlos.garcia@example.com"
+      responses:
+        201:
+          description: Cliente creado con éxito.
+        400:
+          description: Error en los datos enviados.
+
+  /clientes/actualizar/{id}:
+    put:
+      summary: Actualizar un cliente existente
+      tags:
+        - Clientes
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del cliente a actualizar.
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                nombre:
+                  type: string
+                  example: "Carlos"
+                apellido:
+                  type: string
+                  example: "García"
+                telefono:
+                  type: string
+                  example: "9876543210"
+                email:
+                  type: string
+                  example: "carlos.garcia@example.com"
+      responses:
+        200:
+          description: Cliente actualizado con éxito.
+        400:
+          description: Error en los datos enviados.
+        404:
+          description: Cliente no encontrado.
+
+  /clientes/eliminar/{id}:
+    delete:
+      summary: Eliminar un cliente por ID
+      tags:
+        - Clientes
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del cliente a eliminar.
+          schema:
+            type: string
+      responses:
+        200:
+          description: Cliente eliminado con éxito.
+        404:
+          description: Cliente no encontrado.
+        403:
+          description: No tienes permisos para realizar esta acción.
+
+
+
+
+
+  /productos:
+    get:
+      summary: Obtener todos los productos
+      tags:
+        - Productos
+      responses:
+        200:
+          description: Lista de productos obtenida con éxito.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id_producto:
+                      type: integer
+                      example: 1
+                    nombre:
+                      type: string
+                      example: "Manzana"
+                    precio:
+                      type: number
+                      format: float
+                      example: 1.50
+                    stock:
+                      type: integer
+                      example: 100
+                    id_categoria:
+                      type: integer
+                      example: 2
+
+  /productos/{id}:
+    get:
+      summary: Obtener un producto por ID
+      tags:
+        - Productos
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del producto.
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Detalle del producto obtenido.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id_producto:
+                    type: integer
+                    example: 1
+                  nombre:
+                    type: string
+                    example: "Manzana"
+                  precio:
+                    type: number
+                    format: float
+                    example: 1.50
+                  stock:
+                    type: integer
+                    example: 100
+                  id_categoria:
+                    type: integer
+                    example: 2
+        404:
+          description: Producto no encontrado.
+
+  /productos/crear:
+    post:
+      summary: Crear un nuevo producto
+      tags:
+        - Productos
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                nombre:
+                  type: string
+                  example: "Pera"
+                precio:
+                  type: number
+                  format: float
+                  example: 2.50
+                stock:
+                  type: integer
+                  example: 50
+                id_categoria:
+                  type: integer
+                  example: 3
+      responses:
+        201:
+          description: Producto creado con éxito.
+        400:
+          description: Error en los datos enviados.
+
+  /productos/actualizar/{id}:
+    put:
+      summary: Actualizar un producto existente
+      tags:
+        - Productos
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del producto a actualizar.
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                nombre:
+                  type: string
+                  example: "Pera"
+                precio:
+                  type: number
+                  format: float
+                  example: 3.00
+                stock:
+                  type: integer
+                  example: 75
+                id_categoria:
+                  type: integer
+                  example: 3
+      responses:
+        200:
+          description: Producto actualizado con éxito.
+        400:
+          description: Error en los datos enviados.
+        404:
+          description: Producto no encontrado.
+
+  /productos/eliminar/{id}:
+    delete:
+      summary: Eliminar un producto por ID
+      tags:
+        - Productos
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del producto a eliminar.
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Producto eliminado con éxito.
+        404:
+          description: Producto no encontrado.
+        403:
+          description: No tienes permisos para realizar esta acción.
+
+
+  /user/crear:
+    post:
+      summary: Crear un nuevo usuario
+      tags:
+        - Usuarios
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  example: "john_doe"
+                email:
+                  type: string
+                  format: email
+                  example: "john.doe@example.com"
+                password:
+                  type: string
+                  format: password
+                  example: "securepassword123"
+      responses:
+        201:
+          description: Usuario creado con éxito.
+        400:
+          description: Error en los datos enviados.
+
+  /user/login:
+    post:
+      summary: Iniciar sesión de un usuario
+      tags:
+        - Usuarios
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: "john.doe@example.com"
+                password:
+                  type: string
+                  format: password
+                  example: "securepassword123"
+      responses:
+        200:
+          description: Inicio de sesión exitoso. Devuelve un token de autenticación.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+        400:
+          description: Credenciales inválidas o error en los datos enviados.
+
+  /user/actualizar:
+    put:
+      summary: Actualizar rango de un usuario
+      tags:
+        - Usuarios
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user_id:
+                  type: integer
+                  example: 1
+                rango:
+                  type: string
+                  example: "admin"
+      responses:
+        200:
+          description: Rango del usuario actualizado con éxito.
+        400:
+          description: Error en los datos enviados.
+        403:
+          description: No tienes permisos para realizar esta acción.
+        404:
+          description: Usuario no encontrado.
+
+
+
+
+  /ventas:
+    get:
+      summary: Obtener todas las ventas
+      tags:
+        - Ventas
+      responses:
+        200:
+          description: Lista de ventas obtenida con éxito.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id_venta:
+                      type: integer
+                      example: 1
+                    fecha:
+                      type: string
+                      format: date-time
+                      example: "2024-12-01T10:00:00Z"
+                    total:
+                      type: number
+                      format: float
+                      example: 150.75
+                    cliente_id:
+                      type: integer
+                      example: 12
+
+  /ventas/fecha:
+    get:
+      summary: Obtener ventas entre fechas específicas
+      tags:
+        - Ventas
+      parameters:
+        - name: fecha_inicio
+          in: query
+          required: true
+          description: Fecha de inicio en formato ISO 8601.
+          schema:
+            type: string
+            format: date-time
+            example: "2024-12-01T00:00:00Z"
+        - name: fecha_fin
+          in: query
+          required: true
+          description: Fecha de fin en formato ISO 8601.
+          schema:
+            type: string
+            format: date-time
+            example: "2024-12-07T23:59:59Z"
+      responses:
+        200:
+          description: Ventas obtenidas dentro del rango de fechas.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id_venta:
+                      type: integer
+                      example: 1
+                    fecha:
+                      type: string
+                      format: date-time
+                      example: "2024-12-01T10:00:00Z"
+                    total:
+                      type: number
+                      format: float
+                      example: 150.75
+                    cliente_id:
+                      type: integer
+                      example: 12
+        400:
+          description: Parámetros de fechas inválidos.
+
+  /ventas/porID/{id}:
+    get:
+      summary: Obtener una venta por ID
+      tags:
+        - Ventas
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID de la venta.
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Detalle de la venta obtenida.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id_venta:
+                    type: integer
+                    example: 1
+                  fecha:
+                    type: string
+                    format: date-time
+                    example: "2024-12-01T10:00:00Z"
+                  total:
+                    type: number
+                    format: float
+                    example: 150.75
+                  cliente_id:
+                    type: integer
+                    example: 12
+        404:
+          description: Venta no encontrada.
+
+  /ventas/crear:
+    post:
+      summary: Crear una nueva venta
+      tags:
+        - Ventas
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                fecha:
+                  type: string
+                  format: date-time
+                  example: "2024-12-07T14:30:00Z"
+                total:
+                  type: number
+                  format: float
+                  example: 200.50
+                cliente_id:
+                  type: integer
+                  example: 15
+      responses:
+        201:
+          description: Venta creada con éxito.
+        400:
+          description: Error en los datos enviados.
+
+  /ventas/actualizar/{id}:
+    put:
+      summary: Actualizar una venta existente
+      tags:
+        - Ventas
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID de la venta a actualizar.
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                fecha:
+                  type: string
+                  format: date-time
+                  example: "2024-12-07T14:30:00Z"
+                total:
+                  type: number
+                  format: float
+                  example: 220.00
+                cliente_id:
+                  type: integer
+                  example: 15
+      responses:
+        200:
+          description: Venta actualizada con éxito.
+        400:
+          description: Error en los datos enviados.
+        404:
+          description: Venta no encontrada.
+
+  /ventas/eliminar/{id}:
+    delete:
+      summary: Eliminar una venta por ID
+      tags:
+        - Ventas
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID de la venta a eliminar.
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Venta eliminada con éxito.
+        404:
+          description: Venta no encontrada.
+        403:
+          description: No tienes permisos para realizar esta acción.
+
+
+
+
+  /detalle-ventas:
+    get:
+      summary: Obtener todos los detalles de ventas
+      tags:
+        - Detalles de Ventas
+      responses:
+        200:
+          description: Lista de detalles de ventas obtenida con éxito.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id_detalle:
+                      type: integer
+                      example: 1
+                    id_venta:
+                      type: integer
+                      example: 5
+                    id_producto:
+                      type: integer
+                      example: 3
+                    cantidad:
+                      type: integer
+                      example: 2
+                    precio_unitario:
+                      type: number
+                      format: float
+                      example: 50.0
+
+  /detalle-ventas/{id}:
+    get:
+      summary: Obtener un detalle de venta por ID
+      tags:
+        - Detalles de Ventas
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del detalle de venta.
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Detalle de venta obtenido con éxito.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id_detalle:
+                    type: integer
+                    example: 1
+                  id_venta:
+                    type: integer
+                    example: 5
+                  id_producto:
+                    type: integer
+                    example: 3
+                  cantidad:
+                    type: integer
+                    example: 2
+                  precio_unitario:
+                    type: number
+                    format: float
+                    example: 50.0
+        404:
+          description: Detalle de venta no encontrado.
+
+  /detalle-ventas/detalle/{id}:
+    get:
+      summary: Obtener el detalle completo de una venta por ID
+      tags:
+        - Detalles de Ventas
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del detalle de venta.
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Detalle completo de la venta obtenido con éxito.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id_detalle:
+                    type: integer
+                    example: 1
+                  id_venta:
+                    type: integer
+                    example: 5
+                  id_producto:
+                    type: integer
+                    example: 3
+                  cantidad:
+                    type: integer
+                    example: 2
+                  precio_unitario:
+                    type: number
+                    format: float
+                    example: 50.0
+                  nombre_producto:
+                    type: string
+                    example: "Laptop"
+                  subtotal:
+                    type: number
+                    format: float
+                    example: 100.0
+        403:
+          description: No tienes permisos para realizar esta acción.
+        404:
+          description: Detalle de venta no encontrado.
+
+  /detalle-ventas/crear:
+    post:
+      summary: Crear un nuevo detalle de venta
+      tags:
+        - Detalles de Ventas
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id_venta:
+                  type: integer
+                  example: 5
+                id_producto:
+                  type: integer
+                  example: 3
+                cantidad:
+                  type: integer
+                  example: 2
+                precio_unitario:
+                  type: number
+                  format: float
+                  example: 50.0
+      responses:
+        201:
+          description: Detalle de venta creado con éxito.
+        400:
+          description: Error en los datos enviados.
+
+  /detalle-ventas/actualizar/{id}:
+    put:
+      summary: Actualizar un detalle de venta existente
+      tags:
+        - Detalles de Ventas
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del detalle de venta a actualizar.
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id_producto:
+                  type: integer
+                  example: 3
+                cantidad:
+                  type: integer
+                  example: 4
+                precio_unitario:
+                  type: number
+                  format: float
+                  example: 45.0
+      responses:
+        200:
+          description: Detalle de venta actualizado con éxito.
+        400:
+          description: Error en los datos enviados.
+        404:
+          description: Detalle de venta no encontrado.
+
+  /detalle-ventas/eliminar/{id}:
+    delete:
+      summary: Eliminar un detalle de venta por ID
+      tags:
+        - Detalles de Ventas
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del detalle de venta a eliminar.
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Detalle de venta eliminado con éxito.
+        404:
+          description: Detalle de venta no encontrado.
+        403:
+          description: No tienes permisos para realizar esta acción.
